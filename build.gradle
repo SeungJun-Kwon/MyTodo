@@ -40,6 +40,8 @@ dependencies {
 	implementation 'org.json:json:20230227'
 	// Swagger
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
+	// Validation
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 }
 
 tasks.named('test') {
