@@ -4,6 +4,7 @@ import com.sparta.mytodo.dto.LoginRequestDto;
 import com.sparta.mytodo.dto.SignUpRequestDto;
 import com.sparta.mytodo.dto.UserResponseDto;
 import com.sparta.mytodo.entity.ResponseMessage;
+import com.sparta.mytodo.security.UserDetailsImpl;
 import com.sparta.mytodo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -64,11 +66,11 @@ public class UserController {
     }
 
     @PostMapping("/getToken")
-    public ResponseEntity<ResponseMessage<?>> getToken(@RequestBody LoginRequestDto requestDto) {
+    public ResponseEntity<ResponseMessage<?>> getToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         String accessToken = "";
 
         try {
-            accessToken = userService.getToken(requestDto);
+            accessToken = userService.getToken(userDetails.getUser());
         } catch (IllegalArgumentException | NullPointerException e) {
             return ResponseEntity.badRequest().
                     body(ResponseMessage.builder()
@@ -83,7 +85,7 @@ public class UserController {
                 .body(ResponseMessage.builder()
                         .msg("로그인 완료")
                         .httpCode(HttpStatus.OK.value())
-                        .data(requestDto.getUsername() + "\n" + accessToken)
+                        .data(userDetails.getUser().getUsername() + "\n" + accessToken)
                         .build());
     }
 

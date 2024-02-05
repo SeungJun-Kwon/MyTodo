@@ -1,6 +1,5 @@
 package com.sparta.mytodo.service;
 
-import com.sparta.mytodo.dto.LoginRequestDto;
 import com.sparta.mytodo.dto.SignUpRequestDto;
 import com.sparta.mytodo.dto.UserResponseDto;
 import com.sparta.mytodo.entity.User;
@@ -44,16 +43,12 @@ public class UserService {
         return new UserResponseDto(username);
     }
 
-    public String getToken(LoginRequestDto loginRequestDto) {
-        User user = userRepository.findByUsername(loginRequestDto.getUsername()).orElseThrow(
+    public String getToken(User requestUser) {
+        User user = userRepository.findByUsername(requestUser.getUsername()).orElseThrow(
                 () -> new NullPointerException("존재하지 않는 회원입니다.")
         );
 
-        if(!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-
-        return jwtUtil.createToken(loginRequestDto.getUsername(), UserRoleEnum.USER);
+        return jwtUtil.createToken(user.getUsername(), UserRoleEnum.USER);
     }
 
     public String getCookie(String bearerToken) {
