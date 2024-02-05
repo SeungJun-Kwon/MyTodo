@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,6 +32,9 @@ public class TodoCard extends Timestamped{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "todoCard")
+    private List<Comment> comments = new ArrayList<>();
 
     public TodoCard(TodoCardRequestDto requestDto, User user) {
         this.cardname = requestDto.getCardname();
