@@ -8,4 +8,5 @@ import lombok.Setter;
 public class TodoCardRequestDto {
     private String cardname;
     private String content;
+    private boolean isfinished;
 }

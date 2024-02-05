@@ -27,18 +27,16 @@ public class TodoCard extends Timestamped{
     private String content;
 
     @Column(nullable = false)
-    private boolean isFinish;
+    private boolean isfinished;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "todoCard")
-    private List<Comment> comments = new ArrayList<>();
-
     public TodoCard(TodoCardRequestDto requestDto, User user) {
         this.cardname = requestDto.getCardname();
         this.content = requestDto.getContent();
+        this.isfinished = requestDto.isIsfinished();
         this.user = user;
     }
 }

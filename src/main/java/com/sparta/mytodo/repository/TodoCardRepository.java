@@ -10,4 +10,6 @@ import java.util.Optional;
 
 public interface TodoCardRepository extends JpaRepository<TodoCard, Long> {
     Optional<List<TodoCard>> findAllByUser(User user);
+
+    //Optional<List<TodoCard>> findAllOrderByUser();
 }

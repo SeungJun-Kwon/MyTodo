@@ -11,12 +11,14 @@ import java.time.LocalDateTime;
 public class TodoCardResponseDto {
     private String cardname;
     private String content;
+    private boolean isfinished;
     private LocalDateTime cratedAt;
     private LocalDateTime modifiedAt;
 
     public TodoCardResponseDto(TodoCard todoCard) {
         this.cardname = todoCard.getCardname();
         this.content = todoCard.getContent();
+        this.isfinished = todoCard.isIsfinished();
         this.cratedAt = todoCard.getCreatedAt();
         this.modifiedAt = todoCard.getModifiedAt();
     }
