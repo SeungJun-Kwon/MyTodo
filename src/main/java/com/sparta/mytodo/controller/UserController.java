@@ -1,19 +1,16 @@
 package com.sparta.mytodo.controller;
 
-import com.sparta.mytodo.dto.UserRequestDto;
+import com.sparta.mytodo.dto.LoginRequestDto;
+import com.sparta.mytodo.dto.SignUpRequestDto;
 import com.sparta.mytodo.dto.UserResponseDto;
 import com.sparta.mytodo.entity.ResponseMessage;
-import com.sparta.mytodo.jwt.JwtUtil;
 import com.sparta.mytodo.service.UserService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +26,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<ResponseMessage<?>> signup(@Valid @RequestBody UserRequestDto userRequestDto, BindingResult bindingResult) {
+    public ResponseEntity<ResponseMessage<?>> signup(@Valid @RequestBody SignUpRequestDto signUpRequestDto, BindingResult bindingResult) {
         UserResponseDto dto;
 
         try {
@@ -49,7 +46,7 @@ public class UserController {
                                 .build());
             }
 
-            dto = userService.signup(userRequestDto);
+            dto = userService.signup(signUpRequestDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().
                     body(ResponseMessage.builder()
@@ -60,18 +57,18 @@ public class UserController {
         }
 
         return ResponseEntity.ok(ResponseMessage.builder()
-                .msg(userRequestDto.getUsername() + " 유저 회원 가입 완료")
+                .msg(signUpRequestDto.getUsername() + " 유저 회원 가입 완료")
                 .httpCode(HttpStatus.OK.value())
                 .data(dto)
                 .build());
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<ResponseMessage<?>> login(@RequestBody UserRequestDto userRequestDto) {
+    @PostMapping("/getToken")
+    public ResponseEntity<ResponseMessage<?>> getToken(@RequestBody LoginRequestDto requestDto) {
         String accessToken = "";
 
         try {
-            accessToken = userService.login(userRequestDto);
+            accessToken = userService.getToken(requestDto);
         } catch (IllegalArgumentException | NullPointerException e) {
             return ResponseEntity.badRequest().
                     body(ResponseMessage.builder()
@@ -86,7 +83,7 @@ public class UserController {
                 .body(ResponseMessage.builder()
                         .msg("로그인 완료")
                         .httpCode(HttpStatus.OK.value())
-                        .data(userRequestDto.getUsername() + "\n" + accessToken)
+                        .data(requestDto.getUsername() + "\n" + accessToken)
                         .build());
     }
 
