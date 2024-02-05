@@ -54,21 +54,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         response.setStatus(400);
-        try {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("utf-8");
-            response.getWriter().write(
-                    new ObjectMapper().writeValueAsString(ResponseMessage.builder()
-                            .httpCode(400)
-                            .msg("로그인 실패! ID나 비밀번호를 확인해주세요.")
-                            .data(null).build()
-                    )
-            );
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().write(
+                new ObjectMapper().writeValueAsString(ResponseMessage.builder()
+                        .httpCode(400)
+                        .msg("로그인 실패! ID나 비밀번호를 확인해주세요.")
+                        .data(null).build()
+                )
+        );
     }
 
 }
