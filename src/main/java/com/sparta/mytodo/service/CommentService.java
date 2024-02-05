@@ -16,11 +16,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final TodoCardRepository todoCardRepository;
 
-    public CommentResponseDto createComment(Long userId, Long cardId, CommentRequestDto requestDto, User user) {
-        if(!userId.equals(user.getId())) {
-            throw new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
-        }
-
+    public CommentResponseDto createComment(Long cardId, CommentRequestDto requestDto, User user) {
         TodoCard todoCard = todoCardRepository.findById(cardId).orElseThrow(
                 () -> new IllegalArgumentException("해당 카드가 존재하지 않습니다.")
         );

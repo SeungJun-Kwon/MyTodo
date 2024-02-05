@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/comment/{userId}/{cardId}")
-    public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long userId, @PathVariable Long cardId,
+    @PostMapping("/comments/card-id/{cardId}")
+    public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long cardId,
                                                            @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok().body(commentService.createComment(userId, cardId, requestDto, userDetails.getUser()));
+        return ResponseEntity.ok().body(commentService.createComment(cardId, requestDto, userDetails.getUser()));
     }
 }
