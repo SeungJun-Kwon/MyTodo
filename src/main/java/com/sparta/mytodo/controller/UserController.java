@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
 
@@ -63,34 +63,5 @@ public class UserController {
                 .httpCode(HttpStatus.OK.value())
                 .data(dto)
                 .build());
-    }
-
-    @PostMapping("/getToken")
-    public ResponseEntity<ResponseMessage<?>> getToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String accessToken = "";
-
-        try {
-            accessToken = userService.getToken(userDetails.getUser());
-        } catch (IllegalArgumentException | NullPointerException e) {
-            return ResponseEntity.badRequest().
-                    body(ResponseMessage.builder()
-                            .msg(e.getMessage())
-                            .httpCode(HttpStatus.BAD_REQUEST.value())
-                            .data(null)
-                            .build());
-        }
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, accessToken)
-                .body(ResponseMessage.builder()
-                        .msg("로그인 완료")
-                        .httpCode(HttpStatus.OK.value())
-                        .data(userDetails.getUser().getUsername() + "\n" + accessToken)
-                        .build());
-    }
-
-    @GetMapping("/login")
-    public void getCookie(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String bearerToken) {
-        log.info(userService.getCookie(bearerToken));
     }
 }

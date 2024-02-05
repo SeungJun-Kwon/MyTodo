@@ -42,18 +42,4 @@ public class UserService {
         userRepository.save(new User(username, password, role));
         return new UserResponseDto(username);
     }
-
-    public String getToken(User requestUser) {
-        User user = userRepository.findByUsername(requestUser.getUsername()).orElseThrow(
-                () -> new NullPointerException("존재하지 않는 회원입니다.")
-        );
-
-        return jwtUtil.createToken(user.getUsername(), UserRoleEnum.USER);
-    }
-
-    public String getCookie(String bearerToken) {
-        String tokenValue = jwtUtil.getJwtFromToken(bearerToken);
-
-        return jwtUtil.getUserInfoFromToken(tokenValue).getSubject();
-    }
 }
