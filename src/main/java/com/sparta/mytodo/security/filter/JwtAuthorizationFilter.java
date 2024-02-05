@@ -1,5 +1,7 @@
 package com.sparta.mytodo.security.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.mytodo.entity.ResponseMessage;
 import com.sparta.mytodo.jwt.JwtUtil;
 import com.sparta.mytodo.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
@@ -35,6 +37,21 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(tokenValue)) {
             if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
+                res.setStatus(400);
+                try {
+                    res.setContentType("application/json");
+                    res.setCharacterEncoding("utf-8");
+                    res.getWriter().write(
+                            new ObjectMapper().writeValueAsString(ResponseMessage.builder()
+                                    .httpCode(400)
+                                    .msg("토큰이 유효하지 않습니다.")
+                                    .data(null).build()
+                            )
+                    );
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
                 return;
             }
 

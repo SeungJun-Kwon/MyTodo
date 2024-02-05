@@ -55,13 +55,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        response.setStatus(401);
+        response.setStatus(400);
         try {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.getWriter().write(
                     new ObjectMapper().writeValueAsString(ResponseMessage.builder()
-                            .httpCode(401)
+                            .httpCode(400)
                             .msg("로그인 실패! ID나 비밀번호를 확인해주세요.")
                             .data(null).build()
                     )
