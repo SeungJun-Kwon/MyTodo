@@ -146,22 +146,10 @@ public class TodoCardController {
     @PutMapping("cards/card-id/{cardId}/is-finished/{isFinished}")
     public ResponseEntity<ResponseMessage<?>> finishTodo(@PathVariable Long cardId,
                                                          @PathVariable boolean isFinished,
-                                                         @AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                         BindingResult bindingResult) {
+                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         TodoCardResponseDto responseDto;
 
         try {
-            // Validation 예외처리
-            List<String> errorMessages = ValidationUtil.getErrors(bindingResult);
-            if(errorMessages != null && !errorMessages.isEmpty()) {
-                return ResponseEntity.badRequest().
-                        body(ResponseMessage.builder()
-                                .msg(errorMessages.toString())
-                                .httpCode(HttpStatus.BAD_REQUEST.value())
-                                .data(null)
-                                .build());
-            }
-
             responseDto = todoCardService.finishTodo(cardId, isFinished, userDetails.getUser());
         } catch (IllegalArgumentException | NullPointerException e) {
             return ResponseEntity.ok().body(

@@ -29,7 +29,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<ResponseMessage<?>> signup(@Valid @RequestBody SignUpRequestDto signUpRequestDto, BindingResult bindingResult) {
+    public ResponseEntity<ResponseMessage<?>> signup(@Valid @RequestBody SignUpRequestDto signUpRequestDto,
+                                                     BindingResult bindingResult) {
         UserResponseDto dto;
 
         try {
