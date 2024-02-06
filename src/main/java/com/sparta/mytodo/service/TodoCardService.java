@@ -37,7 +37,9 @@ public class TodoCardService {
     }
 
     public List<TodoCardResponseDto> getCards() {
-        List<TodoCard> todoCards = todoCardRepository.findAll();
+        List<TodoCard> todoCards = todoCardRepository.findAllByOrderByUser().orElseThrow(
+                () -> new NullPointerException("카드가 존재하지 않습니다.")
+        );
 
         return todoCards.stream().map(TodoCardResponseDto::new).toList();
     }

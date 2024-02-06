@@ -5,12 +5,17 @@ import com.sparta.mytodo.dto.TodoCardResponseDto;
 import com.sparta.mytodo.entity.ResponseMessage;
 import com.sparta.mytodo.security.UserDetailsImpl;
 import com.sparta.mytodo.service.TodoCardService;
+import com.sparta.mytodo.util.ValidationUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -21,9 +26,22 @@ public class TodoCardController {
     private final TodoCardService todoCardService;
 
     @PostMapping("/cards")
-    public ResponseEntity<ResponseMessage<?>> createCard(@RequestBody TodoCardRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ResponseMessage<?>> createCard(@RequestBody TodoCardRequestDto requestDto,
+                                                         @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                         BindingResult bindingResult) {
         TodoCardResponseDto responseDto;
         try {
+            // Validation 예외처리
+            List<String> errorMessages = ValidationUtil.getErrors(bindingResult);
+            if(errorMessages != null && !errorMessages.isEmpty()) {
+                return ResponseEntity.badRequest().
+                        body(ResponseMessage.builder()
+                                .msg(errorMessages.toString())
+                                .httpCode(HttpStatus.BAD_REQUEST.value())
+                                .data(null)
+                                .build());
+            }
+
             responseDto = todoCardService.createCard(requestDto, userDetails.getUser());
         } catch (NullPointerException | IllegalArgumentException e) {
             return ResponseEntity.ok().body(
@@ -89,11 +107,24 @@ public class TodoCardController {
     }
 
     @PutMapping("cards/card-id/{cardId}")
-    public ResponseEntity<ResponseMessage<?>> updateCard(@PathVariable Long cardId, @RequestBody TodoCardRequestDto requestDto,
-                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ResponseMessage<?>> updateCard(@PathVariable Long cardId,
+                                                         @RequestBody TodoCardRequestDto requestDto,
+                                                         @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                         BindingResult bindingResult) {
         TodoCardResponseDto responseDto;
 
         try{
+            // Validation 예외처리
+            List<String> errorMessages = ValidationUtil.getErrors(bindingResult);
+            if(errorMessages != null && !errorMessages.isEmpty()) {
+                return ResponseEntity.badRequest().
+                        body(ResponseMessage.builder()
+                                .msg(errorMessages.toString())
+                                .httpCode(HttpStatus.BAD_REQUEST.value())
+                                .data(null)
+                                .build());
+            }
+
             responseDto = todoCardService.updateCard(cardId, requestDto, userDetails.getUser());
         } catch (IllegalArgumentException | NullPointerException e) {
             return ResponseEntity.ok().body(
@@ -113,11 +144,24 @@ public class TodoCardController {
     }
 
     @PutMapping("cards/card-id/{cardId}/is-finished/{isFinished}")
-    public ResponseEntity<ResponseMessage<?>> finishTodo(@PathVariable Long cardId, @PathVariable boolean isFinished,
-                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ResponseMessage<?>> finishTodo(@PathVariable Long cardId,
+                                                         @PathVariable boolean isFinished,
+                                                         @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                         BindingResult bindingResult) {
         TodoCardResponseDto responseDto;
 
         try {
+            // Validation 예외처리
+            List<String> errorMessages = ValidationUtil.getErrors(bindingResult);
+            if(errorMessages != null && !errorMessages.isEmpty()) {
+                return ResponseEntity.badRequest().
+                        body(ResponseMessage.builder()
+                                .msg(errorMessages.toString())
+                                .httpCode(HttpStatus.BAD_REQUEST.value())
+                                .data(null)
+                                .build());
+            }
+
             responseDto = todoCardService.finishTodo(cardId, isFinished, userDetails.getUser());
         } catch (IllegalArgumentException | NullPointerException e) {
             return ResponseEntity.ok().body(

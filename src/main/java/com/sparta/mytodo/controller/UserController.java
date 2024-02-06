@@ -6,6 +6,7 @@ import com.sparta.mytodo.dto.UserResponseDto;
 import com.sparta.mytodo.entity.ResponseMessage;
 import com.sparta.mytodo.security.UserDetailsImpl;
 import com.sparta.mytodo.service.UserService;
+import com.sparta.mytodo.util.ValidationUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,13 +34,8 @@ public class UserController {
 
         try {
             // Validation 예외처리
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            if (!fieldErrors.isEmpty()) {
-                List<String> errorMessages = new ArrayList<>();
-                for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                    log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
-                    errorMessages.add(fieldError.getDefaultMessage());
-                }
+            List<String> errorMessages = ValidationUtil.getErrors(bindingResult);
+            if(errorMessages != null && !errorMessages.isEmpty()) {
                 return ResponseEntity.badRequest().
                         body(ResponseMessage.builder()
                                 .msg(errorMessages.toString())

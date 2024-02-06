@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class TodoCardResponseDto {
+    private String username;
     private String cardname;
     private String content;
     private boolean isfinished;
@@ -16,6 +17,7 @@ public class TodoCardResponseDto {
     private LocalDateTime modifiedAt;
 
     public TodoCardResponseDto(TodoCard todoCard) {
+        this.username = todoCard.getUser().getUsername();
         this.cardname = todoCard.getCardname();
         this.content = todoCard.getContent();
         this.isfinished = todoCard.isIsfinished();
