@@ -1,13 +1,10 @@
 package com.sparta.mytodo.dto;
 
 import com.sparta.mytodo.entity.Comment;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
+import lombok.Getter;
 
 @Getter
-@Setter
 public class CommentResponseDto {
     private String username;
     private String cardname;
