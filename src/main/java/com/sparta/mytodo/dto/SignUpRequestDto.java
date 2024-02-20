@@ -3,9 +3,11 @@ package com.sparta.mytodo.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class SignUpRequestDto {
     @NotBlank(message = "사용자 이름이 공백이면 안됩니다.")
     @Size(min = 4, max = 10, message = "사용자 이름의 크기가 4에서 10 사이여야 합니다.")
