@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 public class CommentRequestDto {
     @NotBlank(message = "댓글이 공백이면 안됩니다.")
-    @Size(min = 1, max = 1024, message = "댓글의 길이는 1자 이상 1024자 이하여야 합니다.")
+    @Size(min = 2, max = 1024, message = "댓글의 길이는 2자 이상 1024자 이하여야 합니다.")
     private String content;
 }
