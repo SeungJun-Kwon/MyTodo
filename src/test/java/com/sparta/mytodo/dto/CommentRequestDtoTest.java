@@ -1,9 +1,7 @@
 package com.sparta.mytodo.dto;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +34,8 @@ class CommentRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("댓글 길이 테스트")
     void 댓글길이2() {
-        CommentRequestDto requestDto = CommentRequestDto.builder().content("s".repeat(1025)).build();
+        CommentRequestDto requestDto = CommentRequestDto.builder().content("s".repeat(1025))
+            .build();
 
         validateAndCollectMessages(requestDto);
 

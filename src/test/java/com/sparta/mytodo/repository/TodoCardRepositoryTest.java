@@ -1,12 +1,13 @@
 package com.sparta.mytodo.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.sparta.mytodo.dto.TodoCardRequestDto;
 import com.sparta.mytodo.entity.TodoCard;
 import com.sparta.mytodo.entity.User;
 import com.sparta.mytodo.entity.UserRoleEnum;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -63,7 +64,7 @@ public class TodoCardRepositoryTest extends RepositoryTest {
         String cardname = "카드 이름 수정";
         String content = "내용 수정";
         boolean finished = true;
-        if(todoCardRepository.findById(todoCard.getId()).isPresent()) {
+        if (todoCardRepository.findById(todoCard.getId()).isPresent()) {
             todoCard.setCardname(cardname);
             todoCard.setContent(content);
             todoCard.setIsfinished(finished);
@@ -82,7 +83,7 @@ public class TodoCardRepositoryTest extends RepositoryTest {
             user);
         todoCardRepository.save(todoCard);
 
-        if(todoCardRepository.findById(todoCard.getId()).isPresent()) {
+        if (todoCardRepository.findById(todoCard.getId()).isPresent()) {
             todoCardRepository.delete(todoCard);
         }
         todoCard = todoCardRepository.findById(todoCard.getId()).orElse(null);

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class UserRepositoryTest extends RepositoryTest{
+public class UserRepositoryTest extends RepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -40,7 +40,7 @@ public class UserRepositoryTest extends RepositoryTest{
         user = userRepository.save(new User("abc123", "abc123", UserRoleEnum.USER));
 
         String username = "abc1234";
-        if(userRepository.findById(user.getId()).isPresent()) {
+        if (userRepository.findById(user.getId()).isPresent()) {
             user.setUsername(username);
         }
 
@@ -52,7 +52,7 @@ public class UserRepositoryTest extends RepositoryTest{
     void deleteUser() {
         user = userRepository.save(new User("abc123", "abc123", UserRoleEnum.USER));
 
-        if(userRepository.findById(user.getId()).isPresent()) {
+        if (userRepository.findById(user.getId()).isPresent()) {
             userRepository.delete(user);
         }
         user = userRepository.findById(user.getId()).orElse(null);

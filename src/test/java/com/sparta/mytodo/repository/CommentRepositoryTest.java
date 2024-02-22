@@ -1,6 +1,8 @@
 package com.sparta.mytodo.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.sparta.mytodo.dto.CommentRequestDto;
 import com.sparta.mytodo.dto.TodoCardRequestDto;
@@ -63,7 +65,7 @@ class CommentRepositoryTest extends RepositoryTest {
         Comment comment = new Comment(CommentRequestDto.builder().content("댓글 내용").build(), user,
             todoCard);
         commentRepository.save(comment);
-        
+
         String content = "내용 수정";
         if (commentRepository.findById(comment.getId()).isPresent()) {
             comment.setContent(content);
