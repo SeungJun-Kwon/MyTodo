@@ -8,6 +8,7 @@ import com.sparta.mytodo.dto.TodoCardRequestDto;
 import com.sparta.mytodo.entity.TodoCard;
 import com.sparta.mytodo.entity.User;
 import com.sparta.mytodo.entity.UserRoleEnum;
+import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -89,5 +90,18 @@ public class TodoCardRepositoryTest extends RepositoryTest {
         todoCard = todoCardRepository.findById(todoCard.getId()).orElse(null);
 
         assertNull(todoCard);
+    }
+
+    @Test
+    void findAllByUserAndIsFinishedIsFalse() {
+        TodoCard todoCard = new TodoCard(
+            TodoCardRequestDto.builder().cardname("카드 이름").content("카드 내용").build(),
+            user);
+        todoCardRepository.save(todoCard);
+
+        List<TodoCard> todoCardList = todoCardRepository.findAllByUserAndIsFinishedIsFalse(
+            user.getId());
+
+        assertNotNull(todoCardList);
     }
 }
