@@ -59,4 +59,15 @@ public class UserRepositoryTest extends RepositoryTest {
 
         assertNull(user);
     }
+
+    @Test
+    void findByUsername() {
+        user = userRepository.save(new User("abc123", "abc123", UserRoleEnum.USER));
+        String username = "abc123";
+
+        User findUser = userRepository.findByUsername(username).orElse(null);
+
+        assertNotNull(findUser);
+        assertEquals(user.getUsername(), findUser.getUsername());
+    }
 }
