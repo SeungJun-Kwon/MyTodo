@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ResponseMessage<T> {
+
     int httpCode;
-    String msg;
     T data;
 }
