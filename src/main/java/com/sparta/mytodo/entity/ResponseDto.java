@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class ResponseMessage<T> {
+public class ResponseDto<T> {
 
     int httpCode;
     T data;

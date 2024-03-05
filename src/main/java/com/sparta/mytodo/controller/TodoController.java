@@ -2,7 +2,7 @@ package com.sparta.mytodo.controller;
 
 import com.sparta.mytodo.dto.TodoRequestDto;
 import com.sparta.mytodo.dto.TodoResponseDto;
-import com.sparta.mytodo.entity.ResponseMessage;
+import com.sparta.mytodo.entity.ResponseDto;
 import com.sparta.mytodo.security.UserDetailsImpl;
 import com.sparta.mytodo.service.TodoService;
 import com.sparta.mytodo.util.ValidationUtil;
@@ -31,7 +31,7 @@ public class TodoController {
     private final TodoService todoService;
 
     @PostMapping("/todos")
-    public ResponseEntity<ResponseMessage<TodoResponseDto>> createTodo(
+    public ResponseEntity<ResponseDto<TodoResponseDto>> createTodo(
         @Valid @RequestBody TodoRequestDto requestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         BindingResult bindingResult) {
@@ -42,26 +42,26 @@ public class TodoController {
             userDetails.getUser());
 
         return ResponseEntity.ok().body(
-            ResponseMessage.<TodoResponseDto>builder()
+            ResponseDto.<TodoResponseDto>builder()
                 .httpCode(200)
                 .data(responseDto).build()
         );
     }
 
     @GetMapping("/todos")
-    public ResponseEntity<ResponseMessage<List<TodoResponseDto>>> getTodos() {
+    public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getTodos() {
 
         List<TodoResponseDto> responseDtoList = todoService.getTodos();
 
         return ResponseEntity.ok().body(
-            ResponseMessage.<List<TodoResponseDto>>builder()
+            ResponseDto.<List<TodoResponseDto>>builder()
                 .httpCode(200)
                 .data(responseDtoList).build()
         );
     }
 
     @GetMapping("/todos/user-id/{userId}")
-    public ResponseEntity<ResponseMessage<List<TodoResponseDto>>> getTodosByUser(
+    public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getTodosByUser(
         @PathVariable Long userId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
@@ -69,14 +69,14 @@ public class TodoController {
             userDetails.getUser());
 
         return ResponseEntity.ok().body(
-            ResponseMessage.<List<TodoResponseDto>>builder()
+            ResponseDto.<List<TodoResponseDto>>builder()
                 .httpCode(200)
                 .data(responseDtoList).build()
         );
     }
 
     @PutMapping("todos/{todoId}")
-    public ResponseEntity<ResponseMessage<TodoResponseDto>> updateTodo(
+    public ResponseEntity<ResponseDto<TodoResponseDto>> updateTodo(
         @PathVariable Long todoId,
         @Valid @RequestBody TodoRequestDto requestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -88,14 +88,14 @@ public class TodoController {
             userDetails.getUser());
 
         return ResponseEntity.ok().body(
-            ResponseMessage.<TodoResponseDto>builder()
+            ResponseDto.<TodoResponseDto>builder()
                 .httpCode(200)
                 .data(responseDto).build()
         );
     }
 
     @PutMapping("todos/{todoId}")
-    public ResponseEntity<ResponseMessage<TodoResponseDto>> finishTodo(
+    public ResponseEntity<ResponseDto<TodoResponseDto>> finishTodo(
         @PathVariable Long todoId,
         @RequestParam(name = "finished") boolean finished,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -104,7 +104,7 @@ public class TodoController {
             userDetails.getUser());
 
         return ResponseEntity.ok().body(
-            ResponseMessage.<TodoResponseDto>builder()
+            ResponseDto.<TodoResponseDto>builder()
                 .httpCode(200)
                 .data(responseDto).build()
         );

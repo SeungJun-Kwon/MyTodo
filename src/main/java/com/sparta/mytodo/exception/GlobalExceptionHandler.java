@@ -1,6 +1,7 @@
 package com.sparta.mytodo.exception;
 
-import com.sparta.mytodo.entity.ResponseMessage;
+import com.sparta.mytodo.entity.ExceptionResponseDto;
+import com.sparta.mytodo.entity.ResponseDto;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -15,32 +16,32 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ResponseMessage<Void>> handleException(IllegalArgumentException ex) {
+    public ResponseEntity<ExceptionResponseDto> handleException(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
-            .body(ResponseMessage.<Void>builder().httpCode(HttpStatus.BAD_REQUEST.value())
+            .body(ExceptionResponseDto.builder().httpCode(HttpStatus.BAD_REQUEST.value())
                 .msg(ex.getMessage()).build());
     }
 
     @ExceptionHandler({NullPointerException.class})
-    public ResponseEntity<ResponseMessage<Void>> handleException(NullPointerException ex) {
+    public ResponseEntity<ExceptionResponseDto> handleException(NullPointerException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND.value())
-            .body(ResponseMessage.<Void>builder().httpCode(HttpStatus.NOT_FOUND.value())
+            .body(ExceptionResponseDto.builder().httpCode(HttpStatus.NOT_FOUND.value())
                 .msg(ex.getMessage()).build());
     }
 
     @ExceptionHandler(SignUpUserExistsException.class)
-    public ResponseEntity<ResponseMessage<Void>> handleSignUpUserExistsException(SignUpUserExistsException ex) {
+    public ResponseEntity<ExceptionResponseDto> handleSignUpUserExistsException(SignUpUserExistsException ex) {
         System.out.println(ex.getMessage());
 
         // 로직 처리 ...
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND.value())
-            .body(ResponseMessage.<Void>builder().httpCode(HttpStatus.NOT_FOUND.value())
+            .body(ExceptionResponseDto.builder().httpCode(HttpStatus.NOT_FOUND.value())
                 .msg(ex.getMessage()).build());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseMessage<Void>> handleException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ExceptionResponseDto> handleException(MethodArgumentNotValidException ex) {
 
         List<String> errorMessages = new ArrayList<>();
 
@@ -50,7 +51,7 @@ public class GlobalExceptionHandler {
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
-            .body(ResponseMessage.<Void>builder().httpCode(HttpStatus.BAD_REQUEST.value())
+            .body(ExceptionResponseDto.builder().httpCode(HttpStatus.BAD_REQUEST.value())
                 .msg(errorMessages.toString()).build());
     }
 }

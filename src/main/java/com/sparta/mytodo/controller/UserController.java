@@ -2,7 +2,7 @@ package com.sparta.mytodo.controller;
 
 import com.sparta.mytodo.dto.SignUpRequestDto;
 import com.sparta.mytodo.dto.UserResponseDto;
-import com.sparta.mytodo.entity.ResponseMessage;
+import com.sparta.mytodo.entity.ResponseDto;
 import com.sparta.mytodo.service.UserService;
 import com.sparta.mytodo.util.ValidationUtil;
 import jakarta.validation.Valid;
@@ -25,7 +25,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<ResponseMessage<?>> signup(
+    public ResponseEntity<ResponseDto<?>> signup(
         @Valid @RequestBody SignUpRequestDto signUpRequestDto,
         BindingResult bindingResult) {
 
@@ -33,7 +33,7 @@ public class UserController {
 
         UserResponseDto dto = userService.signup(signUpRequestDto);
 
-        return ResponseEntity.ok(ResponseMessage.builder()
+        return ResponseEntity.ok(ResponseDto.builder()
             .httpCode(HttpStatus.OK.value())
             .data(dto)
             .build());

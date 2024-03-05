@@ -1,7 +1,8 @@
 package com.sparta.mytodo.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.mytodo.entity.ResponseMessage;
+import com.sparta.mytodo.entity.ExceptionResponseDto;
+import com.sparta.mytodo.entity.ResponseDto;
 import com.sparta.mytodo.jwt.JwtUtil;
 import com.sparta.mytodo.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
@@ -10,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -41,9 +43,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 res.setContentType("application/json");
                 res.setCharacterEncoding("utf-8");
                 res.getWriter().write(
-                        new ObjectMapper().writeValueAsString(ResponseMessage.builder()
+                        new ObjectMapper().writeValueAsString(ExceptionResponseDto.builder()
+                                .msg("토큰 인증 실패 . . .")
                                 .httpCode(400)
-                                .data(null).build()
+                                .httpStatus(HttpStatus.BAD_REQUEST)
+                                .build()
                         )
                 );
 

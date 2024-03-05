@@ -2,7 +2,8 @@ package com.sparta.mytodo.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.mytodo.dto.LoginRequestDto;
-import com.sparta.mytodo.entity.ResponseMessage;
+import com.sparta.mytodo.entity.ExceptionResponseDto;
+import com.sparta.mytodo.entity.ResponseDto;
 import com.sparta.mytodo.entity.User;
 import com.sparta.mytodo.entity.UserRoleEnum;
 import com.sparta.mytodo.jwt.JwtUtil;
@@ -11,6 +12,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -61,9 +63,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(
-                new ObjectMapper().writeValueAsString(ResponseMessage.builder()
+                new ObjectMapper().writeValueAsString(ExceptionResponseDto.builder()
+                        .msg("로그인 실패 . . .")
                         .httpCode(400)
-                        .data(null).build()
+                        .httpStatus(HttpStatus.BAD_REQUEST)
+                        .build()
                 )
         );
     }
