@@ -13,6 +13,6 @@ public interface TodoCardRepository extends JpaRepository<TodoCard, Long> {
 
     Optional<List<TodoCard>> findAllByOrderByUser();
 
-    @Query("select t from TodoCard t where t.user.id = ?1 and t.isfinished = false")
+    @Query("select t from TodoCard t where t.user.userId = ?1 and t.finished = false")
     List<TodoCard> findAllByUserAndIsFinishedIsFalse(Long userId);
 }

@@ -53,7 +53,7 @@ public class CommentService {
         );
 
         try {
-            if (!user.getId().equals(comment.getUser().getId())) {
+            if (!user.getUserId().equals(comment.getUser().getUserId())) {
                 throw new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
             }
         } catch (NullPointerException e) {

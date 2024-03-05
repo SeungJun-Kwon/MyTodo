@@ -25,7 +25,7 @@ public class TodoCardService {
     }
 
     public List<TodoCardResponseDto> getCardsByUser(Long userId, User user) {
-        if(!userId.equals(user.getId())) {
+        if(!userId.equals(user.getUserId())) {
             throw new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
         }
 
@@ -48,7 +48,7 @@ public class TodoCardService {
     public TodoCardResponseDto updateCard(Long cardId, TodoCardRequestDto requestDto, User user) {
         TodoCard todoCard = validateCard(cardId, user);
 
-        todoCard.setCardname(requestDto.getCardname());
+        todoCard.setCardName(requestDto.getCardName());
         todoCard.setContent(requestDto.getContent());
 
         return new TodoCardResponseDto(todoCard);
@@ -58,7 +58,7 @@ public class TodoCardService {
     public TodoCardResponseDto finishTodo(Long cardId, boolean isFinished, User user) {
         TodoCard todoCard = validateCard(cardId, user);
 
-        todoCard.setIsfinished(isFinished);
+        todoCard.setFinished(isFinished);
 
         return new TodoCardResponseDto(todoCard);
     }
@@ -69,7 +69,7 @@ public class TodoCardService {
         );
 
         try {
-            if (!user.getId().equals(todoCard.getUser().getId())) {
+            if (!user.getUserId().equals(todoCard.getUser().getUserId())) {
                 throw new IllegalArgumentException("사용자 정보가 일치하지 않습니다.");
             }
         } catch (NullPointerException e) {

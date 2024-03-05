@@ -7,17 +7,17 @@ import lombok.Getter;
 @Getter
 public class TodoCardResponseDto {
     private String username;
-    private String cardname;
+    private String cardName;
     private String content;
-    private boolean isfinished;
+    private boolean finished;
     private LocalDateTime cratedAt;
     private LocalDateTime modifiedAt;
 
     public TodoCardResponseDto(TodoCard todoCard) {
         this.username = todoCard.getUser().getUsername();
-        this.cardname = todoCard.getCardname();
+        this.cardName = todoCard.getCardName();
         this.content = todoCard.getContent();
-        this.isfinished = todoCard.isIsfinished();
+        this.finished = todoCard.isFinished();
         this.cratedAt = todoCard.getCreatedAt();
         this.modifiedAt = todoCard.getModifiedAt();
     }

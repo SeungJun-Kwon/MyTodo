@@ -14,29 +14,29 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "cards")
+@Table(name = "card")
 public class TodoCard extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long cardId;
 
     @Column(nullable = false)
-    private String cardname;
+    private String cardName;
 
     @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
-    private boolean isfinished;
+    private boolean finished;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User user;
 
     public TodoCard(TodoCardRequestDto requestDto, User user) {
-        this.cardname = requestDto.getCardname();
+        this.cardName = requestDto.getCardName();
         this.content = requestDto.getContent();
-        this.isfinished = requestDto.isIsfinished();
+        this.finished = requestDto.isFinished();
         this.user = user;
     }
 }
