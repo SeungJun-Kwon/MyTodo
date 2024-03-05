@@ -1,7 +1,6 @@
 package com.sparta.mytodo.exception;
 
 import com.sparta.mytodo.entity.ExceptionResponseDto;
-import com.sparta.mytodo.entity.ResponseDto;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ExceptionResponseDto> handleException(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
@@ -30,7 +30,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(SignUpUserExistsException.class)
-    public ResponseEntity<ExceptionResponseDto> handleSignUpUserExistsException(SignUpUserExistsException ex) {
+    public ResponseEntity<ExceptionResponseDto> handleSignUpUserExistsException(
+        SignUpUserExistsException ex) {
         System.out.println(ex.getMessage());
 
         // 로직 처리 ...
@@ -41,7 +42,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponseDto> handleException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ExceptionResponseDto> handleException(
+        MethodArgumentNotValidException ex) {
 
         List<String> errorMessages = new ArrayList<>();
 

@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class TodoRequestDto {
+
     @NotBlank(message = "제목이 공백이면 안됩니다.")
     @Size(min = 5, max = 50, message = "제목의 길이는 5자 이상 50자 이하여야 합니다.")
     private String todoName;

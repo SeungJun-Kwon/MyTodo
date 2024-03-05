@@ -14,12 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
+
     private final CommentRepository commentRepository;
     private final TodoRepository todoRepository;
 
     public CommentResponseDto createComment(Long cardId, CommentRequestDto requestDto, User user) {
         Todo todo = todoRepository.findById(cardId).orElseThrow(
-                () -> new IllegalArgumentException("해당 카드가 존재하지 않습니다.")
+            () -> new IllegalArgumentException("해당 카드가 존재하지 않습니다.")
         );
 
         Comment comment = new Comment(requestDto, user, todo);
@@ -30,7 +31,8 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto, User user) {
+    public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto,
+        User user) {
         Comment comment = validateComment(commentId, user);
 
         comment.setContent(requestDto.getContent());
@@ -49,7 +51,7 @@ public class CommentService {
 
     private Comment validateComment(Long commentId, User user) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new NullPointerException("존재하지 않는 댓글입니다.")
+            () -> new NullPointerException("존재하지 않는 댓글입니다.")
         );
 
         try {

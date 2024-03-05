@@ -5,15 +5,15 @@ import com.sparta.mytodo.dto.TodoResponseDto;
 import com.sparta.mytodo.entity.Todo;
 import com.sparta.mytodo.entity.User;
 import com.sparta.mytodo.repository.TodoRepository;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @AllArgsConstructor
 public class TodoService {
+
     private final TodoRepository todoRepository;
 
     public TodoResponseDto createTodo(TodoRequestDto requestDto, User user) {
@@ -25,12 +25,12 @@ public class TodoService {
     }
 
     public List<TodoResponseDto> getTodosByUser(Long userId, User user) {
-        if(!userId.equals(user.getUserId())) {
+        if (!userId.equals(user.getUserId())) {
             throw new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
         }
 
         List<Todo> todos = todoRepository.findAllByUser(user).orElseThrow(
-                () -> new NullPointerException("Todo 가 존재하지 않습니다.")
+            () -> new NullPointerException("Todo 가 존재하지 않습니다.")
         );
 
         return todos.stream().map(TodoResponseDto::new).toList();
@@ -38,7 +38,7 @@ public class TodoService {
 
     public List<TodoResponseDto> getTodos() {
         List<Todo> todos = todoRepository.findAllByOrderByUser().orElseThrow(
-                () -> new NullPointerException("Todo 가 존재하지 않습니다.")
+            () -> new NullPointerException("Todo 가 존재하지 않습니다.")
         );
 
         return todos.stream().map(TodoResponseDto::new).toList();
@@ -65,7 +65,7 @@ public class TodoService {
 
     private Todo validateTodo(Long todoId, User user) {
         Todo todo = todoRepository.findById(todoId).orElseThrow(
-                () -> new NullPointerException("존재하지 않는 카드입니다.")
+            () -> new NullPointerException("존재하지 않는 카드입니다.")
         );
 
         try {

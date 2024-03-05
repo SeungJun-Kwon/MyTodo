@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -26,7 +27,7 @@ public class UserService {
         String userName = signUpRequestDto.getUserName();
         String password = passwordEncoder.encode(signUpRequestDto.getPassword());
 
-        if(userRepository.findByEmail(email).isPresent()) {
+        if (userRepository.findByEmail(email).isPresent()) {
             throw new SignUpUserExistsException("이미 존재하는 회원입니다.");
         }
 

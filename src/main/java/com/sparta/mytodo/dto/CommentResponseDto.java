@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class CommentResponseDto {
+
     private String userName;
     private String todoName;
     private String content;

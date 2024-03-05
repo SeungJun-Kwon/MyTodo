@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity // Spring Security 지원을 가능하게 함
 @RequiredArgsConstructor
 public class WebSecurityConfig {
+
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
@@ -32,7 +33,8 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
+        throws Exception {
         return configuration.getAuthenticationManager();
     }
 
@@ -55,19 +57,21 @@ public class WebSecurityConfig {
 
         // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
         http.sessionManagement((sessionManagement) ->
-                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
-                authorizeHttpRequests
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-                        .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
-                        .requestMatchers("/api/users/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
-                        .requestMatchers("/swagger*/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**").permitAll()
-                        .requestMatchers("/v3/api-docs").permitAll()
-                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**").hasRole("USER")
-                        .anyRequest().authenticated() // 그 외 모든 요청 인증처리
+            authorizeHttpRequests
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                .permitAll() // resources 접근 허용 설정
+                .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
+                .requestMatchers("/api/users/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
+                .requestMatchers("/swagger*/**").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()
+                .requestMatchers("/v3/api-docs").permitAll()
+                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**")
+                .hasRole("USER")
+                .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
         // 필터 관리

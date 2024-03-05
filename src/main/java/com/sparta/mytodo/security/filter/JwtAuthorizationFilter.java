@@ -2,7 +2,6 @@ package com.sparta.mytodo.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.mytodo.entity.ExceptionResponseDto;
-import com.sparta.mytodo.entity.ResponseDto;
 import com.sparta.mytodo.jwt.JwtUtil;
 import com.sparta.mytodo.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
@@ -10,6 +9,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,10 +20,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-
 @Slf4j(topic = "JWT 검증 및 인가")
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
+
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -33,7 +32,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
+        FilterChain filterChain) throws ServletException, IOException {
         String tokenValue = jwtUtil.getJwtFromHeader(req);
 
         if (StringUtils.hasText(tokenValue)) {
@@ -43,12 +43,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 res.setContentType("application/json");
                 res.setCharacterEncoding("utf-8");
                 res.getWriter().write(
-                        new ObjectMapper().writeValueAsString(ExceptionResponseDto.builder()
-                                .msg("토큰 인증 실패 . . .")
-                                .httpCode(400)
-                                .httpStatus(HttpStatus.BAD_REQUEST)
-                                .build()
-                        )
+                    new ObjectMapper().writeValueAsString(ExceptionResponseDto.builder()
+                        .msg("토큰 인증 실패 . . .")
+                        .httpCode(400)
+                        .httpStatus(HttpStatus.BAD_REQUEST)
+                        .build()
+                    )
                 );
 
                 return;
@@ -79,6 +79,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     // 인증 객체 생성
     private Authentication createAuthentication(Claims info) {
         UserDetails userDetails = userDetailsService.loadUserByClaims(info);
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, null,
+            userDetails.getAuthorities());
     }
 }

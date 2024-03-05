@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class TodoResponseDto {
+
     private String userName;
     private String todoName;
     private String content;

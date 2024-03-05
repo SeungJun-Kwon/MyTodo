@@ -8,13 +8,14 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
+
     @Bean
     public GroupedOpenApi publicApi() {
         // pathsToMatch로 원하는 경로의 api만 나오도록 설정
         return GroupedOpenApi.builder()
-                .group("api")
-                .pathsToMatch("/api/**")
-                .build();
+            .group("api")
+            .pathsToMatch("/api/**")
+            .build();
     }
 
     @Bean

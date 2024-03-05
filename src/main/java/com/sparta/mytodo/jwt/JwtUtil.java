@@ -2,22 +2,27 @@ package com.sparta.mytodo.jwt;
 
 import com.sparta.mytodo.entity.User;
 import com.sparta.mytodo.entity.UserRoleEnum;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Slf4j(topic = "JwtUtil")
 @Component
 public class JwtUtil {
+
     // Header KEY 값
     public static final String AUTHORIZATION_HEADER = "Authorization";
     // 사용자 권한 값의 KEY
@@ -43,13 +48,13 @@ public class JwtUtil {
         Date date = new Date();
 
         return Jwts.builder()
-                .setSubject(user.getEmail()) // 사용자 식별자값(Email)
-                .claim("userName", user.getUserName())
-                .claim(AUTHORIZATION_KEY, role) // 사용자 권한
-                .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
-                .setIssuedAt(date) // 발급일
-                .signWith(key, signatureAlgorithm) // 암호화 알고리즘
-                .compact();
+            .setSubject(user.getEmail()) // 사용자 식별자값(Email)
+            .claim("userName", user.getUserName())
+            .claim(AUTHORIZATION_KEY, role) // 사용자 권한
+            .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
+            .setIssuedAt(date) // 발급일
+            .signWith(key, signatureAlgorithm) // 암호화 알고리즘
+            .compact();
     }
 
     // header 에서 JWT 가져오기
