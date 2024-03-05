@@ -1,27 +1,23 @@
 package com.sparta.mytodo.entity;
 
-import com.sparta.mytodo.dto.TodoCardRequestDto;
+import com.sparta.mytodo.dto.TodoRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "card")
-public class TodoCard extends Timestamped{
+@Table(name = "todo")
+public class Todo extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cardId;
+    private Long todoId;
 
     @Column(nullable = false)
-    private String cardName;
+    private String todoName;
 
     @Column(nullable = false)
     private String content;
@@ -33,8 +29,8 @@ public class TodoCard extends Timestamped{
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User user;
 
-    public TodoCard(TodoCardRequestDto requestDto, User user) {
-        this.cardName = requestDto.getCardName();
+    public Todo(TodoRequestDto requestDto, User user) {
+        this.todoName = requestDto.getTodoName();
         this.content = requestDto.getContent();
         this.finished = requestDto.isFinished();
         this.user = user;

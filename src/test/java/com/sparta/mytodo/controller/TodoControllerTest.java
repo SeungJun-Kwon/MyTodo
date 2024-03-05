@@ -9,11 +9,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.mytodo.config.WebSecurityConfig;
-import com.sparta.mytodo.dto.TodoCardRequestDto;
+import com.sparta.mytodo.dto.TodoRequestDto;
 import com.sparta.mytodo.entity.User;
 import com.sparta.mytodo.entity.UserRoleEnum;
 import com.sparta.mytodo.security.UserDetailsImpl;
-import com.sparta.mytodo.service.TodoCardService;
+import com.sparta.mytodo.service.TodoService;
 import java.security.Principal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @WebMvcTest(
-    controllers = {TodoCardController.class},
+    controllers = {TodoController.class},
     excludeFilters = {
         @ComponentScan.Filter(
             type = FilterType.ASSIGNABLE_TYPE,
@@ -38,7 +38,7 @@ import org.springframework.web.context.WebApplicationContext;
         )
     }
 )
-public class TodoCardControllerTest {
+public class TodoControllerTest {
 
     private MockMvc mockMvc;
     private Principal principal;
@@ -50,7 +50,7 @@ public class TodoCardControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    TodoCardService todoCardService;
+    TodoService todoService;
 
     @BeforeEach
     public void setup() {
@@ -64,79 +64,80 @@ public class TodoCardControllerTest {
     private void mockUserSetup() {
         // Mock 테스트 유저 생성
         Long userId = 100L;
-        String username = "abc123";
+        String email = "abc123@naver.com";
+        String userName = "abc123";
         String password = "abc12345";
         UserRoleEnum role = UserRoleEnum.USER;
-        User user = new User(username, password, role);
-        user.setId(userId);
+        User user = new User(email, userName, password, role);
+        user.setUserId(userId);
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
         principal = new UsernamePasswordAuthenticationToken(userDetails, "",
             userDetails.getAuthorities());
     }
 
     @Test
-    @DisplayName("Create Card")
-    void createCard() throws Exception {
+    @DisplayName("Create Todo")
+    void createTodo() throws Exception {
         // given
-        String cardname = "카드 이름";
-        String content = "카드 내용 카드 내용 카드 내용";
-        TodoCardRequestDto requestDto = TodoCardRequestDto.builder().cardname(cardname)
+        String todoName = "Todo 이름";
+        String content = "Todo 내용 Todo 내용 Todo 내용";
+        TodoRequestDto requestDto = TodoRequestDto.builder().todoName(todoName)
             .content(content).build();
 
         String postInfo = objectMapper.writeValueAsString(requestDto);
 
         // when-then
-        mockMvc.perform(post("/api/cards").content(postInfo).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post("/api/todos").content(postInfo).contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).principal(principal)).andExpect(status().isOk())
             .andDo(print());
     }
 
     @Test
-    @DisplayName("Get Cards")
-    void getCards() throws Exception {
+    @DisplayName("Get Todos")
+    void getTodos() throws Exception {
         // given
 
         // when-then
-        mockMvc.perform(get("/api/cards").accept(MediaType.APPLICATION_JSON).principal(principal))
+        mockMvc.perform(get("/api/todos").accept(MediaType.APPLICATION_JSON).principal(principal))
             .andExpect(status().isOk()).andDo(print());
     }
 
     @Test
-    @DisplayName("Get Cards By User")
-    void getCardsByUser() throws Exception {
+    @DisplayName("Get Todos By User")
+    void getTodosByUser() throws Exception {
         // given
 
         // when-then
         mockMvc.perform(
-                get("/api/cards/user-id/100").accept(MediaType.APPLICATION_JSON).principal(principal))
+                get("/api/todos/user-id/100").accept(MediaType.APPLICATION_JSON).principal(principal))
             .andExpect(status().isOk()).andDo(print());
     }
 
     @Test
-    @DisplayName("Update Card")
-    void updateCard() throws Exception {
+    @DisplayName("Update Todo")
+    void updateTodo() throws Exception {
         // given
-        String cardname = "카드 이름";
-        String content = "카드 내용 카드 내용 카드 내용";
-        TodoCardRequestDto requestDto = TodoCardRequestDto.builder().cardname(cardname)
+        String todoName = "Todo 이름";
+        String content = "Todo 내용 Todo 내용 Todo 내용";
+        TodoRequestDto requestDto = TodoRequestDto.builder().todoName(todoName)
             .content(content).build();
 
         String postInfo = objectMapper.writeValueAsString(requestDto);
 
         // when-then
         mockMvc.perform(
-                put("/api/cards/card-id/100").content(postInfo).contentType(MediaType.APPLICATION_JSON)
+                put("/api/todos/100").content(postInfo).contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON).principal(principal)).andExpect(status().isOk())
             .andDo(print());
     }
 
     @Test
-    @DisplayName("Finish Card")
-    void finishCard() throws Exception {
+    @DisplayName("Finish Todo")
+    void finishTodo() throws Exception {
         // given
 
         // when-then
-        mockMvc.perform(put("/api/cards/card-id/100/is-finished/true")
+        mockMvc.perform(put("/api/cards/100?finished=true")
                 .accept(MediaType.APPLICATION_JSON).principal(principal)).andExpect(status().isOk())
             .andDo(print());
     }

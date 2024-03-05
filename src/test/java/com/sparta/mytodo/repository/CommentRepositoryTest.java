@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.sparta.mytodo.dto.CommentRequestDto;
-import com.sparta.mytodo.dto.TodoCardRequestDto;
+import com.sparta.mytodo.dto.TodoRequestDto;
 import com.sparta.mytodo.entity.Comment;
-import com.sparta.mytodo.entity.TodoCard;
+import com.sparta.mytodo.entity.Todo;
 import com.sparta.mytodo.entity.User;
 import com.sparta.mytodo.entity.UserRoleEnum;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,22 +23,22 @@ class CommentRepositoryTest extends RepositoryTest {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    TodoCardRepository todoCardRepository;
+    TodoRepository todoRepository;
 
     private static User user;
-    private static TodoCard todoCard;
+    private static Todo todo;
 
     @BeforeAll
     static void beforeAll() {
-        user = new User("abc123", "abc123", UserRoleEnum.USER);
-        todoCard = new TodoCard(
-            TodoCardRequestDto.builder().cardname("카드 이름").content("카드 내용").build(), user);
+        user = new User("abc123@naver.com", "abc123", "abc123", UserRoleEnum.USER);
+        todo = new Todo(
+            TodoRequestDto.builder().todoName("Todo 이름").content("Todo 내용").build(), user);
     }
 
     @BeforeEach
     void setUp() {
         userRepository.save(user);
-        todoCardRepository.save(todoCard);
+        todoRepository.save(todo);
     }
 
     @Test
@@ -48,14 +48,14 @@ class CommentRepositoryTest extends RepositoryTest {
         String content = "댓글 내용";
         comment.setContent(content);
         comment.setUser(user);
-        comment.setTodoCard(todoCard);
+        comment.setTodo(todo);
 
         Comment createdComment = commentRepository.save(comment);
 
         assertNotNull(createdComment);
         assertEquals(content, createdComment.getContent());
         assertEquals(user, createdComment.getUser());
-        assertEquals(todoCard, createdComment.getTodoCard());
+        assertEquals(todo, createdComment.getTodo());
         assertNotNull(createdComment.getCreatedAt());
     }
 
@@ -63,11 +63,11 @@ class CommentRepositoryTest extends RepositoryTest {
     @DisplayName("Comment 수정")
     void updateComment() {
         Comment comment = new Comment(CommentRequestDto.builder().content("댓글 내용").build(), user,
-            todoCard);
+            todo);
         commentRepository.save(comment);
 
         String content = "내용 수정";
-        if (commentRepository.findById(comment.getId()).isPresent()) {
+        if (commentRepository.findById(comment.getCommentId()).isPresent()) {
             comment.setContent(content);
         }
 
@@ -78,13 +78,13 @@ class CommentRepositoryTest extends RepositoryTest {
     @DisplayName("Comment 삭제")
     void deleteComment() {
         Comment comment = new Comment(CommentRequestDto.builder().content("댓글 내용").build(), user,
-            todoCard);
+            todo);
         commentRepository.save(comment);
 
-        if (commentRepository.findById(comment.getId()).isPresent()) {
+        if (commentRepository.findById(comment.getCommentId()).isPresent()) {
             commentRepository.delete(comment);
         }
-        comment = commentRepository.findById(comment.getId()).orElse(null);
+        comment = commentRepository.findById(comment.getCommentId()).orElse(null);
 
         assertNull(comment);
     }

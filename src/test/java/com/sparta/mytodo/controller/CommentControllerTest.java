@@ -12,9 +12,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.mytodo.config.WebSecurityConfig;
 import com.sparta.mytodo.dto.CommentRequestDto;
 import com.sparta.mytodo.dto.CommentResponseDto;
-import com.sparta.mytodo.dto.TodoCardRequestDto;
+import com.sparta.mytodo.dto.TodoRequestDto;
 import com.sparta.mytodo.entity.Comment;
-import com.sparta.mytodo.entity.TodoCard;
+import com.sparta.mytodo.entity.Todo;
 import com.sparta.mytodo.entity.User;
 import com.sparta.mytodo.entity.UserRoleEnum;
 import com.sparta.mytodo.security.UserDetailsImpl;
@@ -58,7 +58,7 @@ class CommentControllerTest {
     CommentService commentService;
 
     User user;
-    TodoCard todoCard;
+    Todo todo;
 
     @BeforeEach
     public void setup() {
@@ -72,19 +72,20 @@ class CommentControllerTest {
     private void mockSetup() {
         // Mock 테스트 유저 생성
         Long userId = 100L;
-        String username = "abc123";
+        String email = "abc123@naver.com";
+        String userName = "abc123";
         String password = "abc12345";
         UserRoleEnum role = UserRoleEnum.USER;
-        user = new User(username, password, role);
-        user.setId(userId);
+        user = new User(email, userName, password, role);
+        user.setUserId(userId);
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
         principal = new UsernamePasswordAuthenticationToken(userDetails, "",
             userDetails.getAuthorities());
 
-        TodoCardRequestDto todoCardRequestDto = TodoCardRequestDto.builder().cardname("카드 이름입니다")
+        TodoRequestDto todoRequestDto = TodoRequestDto.builder().todoName("카드 이름입니다")
             .content("카드 내용입니다!!!!!").build();
-        todoCard = new TodoCard(todoCardRequestDto, user);
-        todoCard.setId(100L);
+        todo = new Todo(todoRequestDto, user);
+        todo.setTodoId(100L);
     }
 
     @Test
@@ -92,7 +93,7 @@ class CommentControllerTest {
     void createComment() throws Exception {
         // given
         CommentRequestDto requestDto = CommentRequestDto.builder().content("댓글 내용").build();
-        Comment comment = new Comment(requestDto, user, todoCard);
+        Comment comment = new Comment(requestDto, user, todo);
         CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
 
         String postInfo = objectMapper.writeValueAsString(requestDto);

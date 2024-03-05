@@ -6,15 +6,15 @@ import lombok.Getter;
 
 @Getter
 public class CommentResponseDto {
-    private String username;
-    private String cardName;
+    private String userName;
+    private String todoName;
     private String content;
     private LocalDateTime cratedAt;
     private LocalDateTime modifiedAt;
 
     public CommentResponseDto(Comment comment) {
-        this.username = comment.getUser().getUsername();
-        this.cardName = comment.getTodoCard().getCardName();
+        this.userName = comment.getUser().getUserName();
+        this.todoName = comment.getTodo().getTodoName();
         this.content = comment.getContent();
         this.cratedAt = comment.getCreatedAt();
         this.modifiedAt = comment.getModifiedAt();

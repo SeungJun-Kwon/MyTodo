@@ -20,14 +20,15 @@ public class UserRepositoryTest extends RepositoryTest {
     @Test
     @DisplayName("유저 생성")
     void createUser() {
-        String username = "abc123";
+        String email = "abc123@naver.com";
+        String userName = "abc123";
         String password = "abc123";
         UserRoleEnum role = UserRoleEnum.USER;
 
-        User createdUser = userRepository.save(new User(username, password, role));
+        User createdUser = userRepository.save(new User(email, userName, password, role));
 
-        assertNotNull(createdUser.getId());
-        assertEquals(username, createdUser.getUsername());
+        assertNotNull(createdUser.getUserId());
+        assertEquals(userName, createdUser.getUserName());
         assertEquals(password, createdUser.getPassword());
         assertEquals(role, createdUser.getRole());
 
@@ -37,37 +38,37 @@ public class UserRepositoryTest extends RepositoryTest {
     @Test
     @DisplayName("유저 수정")
     void updateUser() {
-        user = userRepository.save(new User("abc123", "abc123", UserRoleEnum.USER));
+        user = userRepository.save(new User("abc123@naver.com", "abc123", "abc123", UserRoleEnum.USER));
 
-        String username = "abc1234";
-        if (userRepository.findById(user.getId()).isPresent()) {
-            user.setUsername(username);
+        String userName = "abc1234";
+        if (userRepository.findById(user.getUserId()).isPresent()) {
+            user.setUserName(userName);
         }
 
-        assertEquals(username, user.getUsername());
+        assertEquals(userName, user.getUserName());
     }
 
     @Test
     @DisplayName("유저 삭제")
     void deleteUser() {
-        user = userRepository.save(new User("abc123", "abc123", UserRoleEnum.USER));
+        user = userRepository.save(new User("abc123@naver.com", "abc123", "abc123", UserRoleEnum.USER));
 
-        if (userRepository.findById(user.getId()).isPresent()) {
+        if (userRepository.findById(user.getUserId()).isPresent()) {
             userRepository.delete(user);
         }
-        user = userRepository.findById(user.getId()).orElse(null);
+        user = userRepository.findById(user.getUserId()).orElse(null);
 
         assertNull(user);
     }
 
     @Test
-    void findByUsername() {
-        user = userRepository.save(new User("abc123", "abc123", UserRoleEnum.USER));
-        String username = "abc123";
+    void findByEmail() {
+        user = userRepository.save(new User("abc123@naver.com", "abc123", "abc123", UserRoleEnum.USER));
+        String email = "abc123@naver.com";
 
-        User findUser = userRepository.findByUsername(username).orElse(null);
+        User findUser = userRepository.findByEmail(email).orElse(null);
 
         assertNotNull(findUser);
-        assertEquals(user.getUsername(), findUser.getUsername());
+        assertEquals(user.getEmail(), findUser.getEmail());
     }
 }

@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 
 @Entity
 @Getter
@@ -26,11 +25,11 @@ public class Comment extends Timestamped {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private TodoCard todoCard;
+    private Todo todo;
 
-    public Comment(CommentRequestDto requestDto, User user, TodoCard todoCard) {
+    public Comment(CommentRequestDto requestDto, User user, Todo todo) {
         this.content = requestDto.getContent();
         this.user = user;
-        this.todoCard = todoCard;
+        this.todo = todo;
     }
 }

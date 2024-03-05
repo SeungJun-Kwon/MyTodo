@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class TodoCardRequestDtoTest extends DtoTest {
+class TodoRequestDtoTest extends DtoTest {
 
 
     private static final String MSG_CARDNAME_EMPTY = "제목이 공백이면 안됩니다.";
@@ -16,7 +16,7 @@ class TodoCardRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("제목 공백 테스트")
     void 제목공백() {
-        TodoCardRequestDto requestDto = TodoCardRequestDto.builder().cardname("")
+        TodoRequestDto requestDto = TodoRequestDto.builder().todoName("")
             .content("abcde12345").build();
 
         validateAndCollectMessages(requestDto);
@@ -28,7 +28,7 @@ class TodoCardRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("제목 길이 테스트")
     void 제목길이1() {
-        TodoCardRequestDto requestDto = TodoCardRequestDto.builder().cardname("abc")
+        TodoRequestDto requestDto = TodoRequestDto.builder().todoName("abc")
             .content("abcde12345").build();
 
         validateAndCollectMessages(requestDto);
@@ -39,7 +39,7 @@ class TodoCardRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("제목 길이 테스트")
     void 제목길이2() {
-        TodoCardRequestDto requestDto = TodoCardRequestDto.builder().cardname("s".repeat(51))
+        TodoRequestDto requestDto = TodoRequestDto.builder().todoName("s".repeat(51))
             .content("abcde12345").build();
 
         validateAndCollectMessages(requestDto);
@@ -50,7 +50,7 @@ class TodoCardRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("내용 공백 테스트")
     void 내용공백() {
-        TodoCardRequestDto requestDto = TodoCardRequestDto.builder().cardname("abc123")
+        TodoRequestDto requestDto = TodoRequestDto.builder().todoName("abc123")
             .content("").build();
 
         validateAndCollectMessages(requestDto);
@@ -62,7 +62,7 @@ class TodoCardRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("내용 길이 테스트")
     void 내용길이1() {
-        TodoCardRequestDto requestDto = TodoCardRequestDto.builder().cardname("abc123")
+        TodoRequestDto requestDto = TodoRequestDto.builder().todoName("abc123")
             .content("abc123").build();
 
         validateAndCollectMessages(requestDto);
@@ -73,7 +73,7 @@ class TodoCardRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("내용 길이 테스트")
     void 내용길이2() {
-        TodoCardRequestDto requestDto = TodoCardRequestDto.builder().cardname("abc123")
+        TodoRequestDto requestDto = TodoRequestDto.builder().todoName("abc123")
             .content("s".repeat(1025)).build();
 
         validateAndCollectMessages(requestDto);

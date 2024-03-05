@@ -6,13 +6,13 @@ import static org.mockito.BDDMockito.given;
 
 import com.sparta.mytodo.dto.CommentRequestDto;
 import com.sparta.mytodo.dto.CommentResponseDto;
-import com.sparta.mytodo.dto.TodoCardRequestDto;
+import com.sparta.mytodo.dto.TodoRequestDto;
 import com.sparta.mytodo.entity.Comment;
-import com.sparta.mytodo.entity.TodoCard;
+import com.sparta.mytodo.entity.Todo;
 import com.sparta.mytodo.entity.User;
 import com.sparta.mytodo.entity.UserRoleEnum;
 import com.sparta.mytodo.repository.CommentRepository;
-import com.sparta.mytodo.repository.TodoCardRepository;
+import com.sparta.mytodo.repository.TodoRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,39 +27,39 @@ class CommentServiceTest {
     @Mock
     CommentRepository commentRepository;
     @Mock
-    TodoCardRepository todoCardRepository;
+    TodoRepository todoRepository;
 
     CommentService commentService;
 
     @BeforeEach
     void setUp() {
-        commentService = new CommentService(commentRepository, todoCardRepository);
+        commentService = new CommentService(commentRepository, todoRepository);
     }
 
     @Test
     @DisplayName("Create Comment")
     void createComment() {
         // given
-        User user = new User("abc123", "abc12345", UserRoleEnum.USER);
+        User user = new User("abc123@naver.com", "abc123", "abc12345", UserRoleEnum.USER);
 
-        Long cardId = 100L;
-        TodoCard todoCard = new TodoCard(TodoCardRequestDto.builder().cardname("카드 이름")
-            .content("카드 내용").build(), user);
-        todoCard.setId(cardId);
-        given(todoCardRepository.findById(cardId)).willReturn(Optional.of(todoCard));
+        Long todoId = 100L;
+        Todo todo = new Todo(TodoRequestDto.builder().todoName("Todo 이름")
+            .content("Todo 내용").build(), user);
+        todo.setTodoId(todoId);
+        given(todoRepository.findById(todoId)).willReturn(Optional.of(todo));
 
         String content = "댓글 내용";
 
         // when
-        CommentResponseDto responseDto = commentService.createComment(cardId,
+        CommentResponseDto responseDto = commentService.createComment(todoId,
             CommentRequestDto.builder().content(content).build(),
             user);
 
         // then
         assertNotNull(responseDto);
         assertEquals(content, responseDto.getContent());
-        assertEquals(user.getUsername(), responseDto.getUsername());
-        assertEquals(todoCard.getCardname(), responseDto.getCardname());
+        assertEquals(user.getUserName(), responseDto.getUserName());
+        assertEquals(todo.getTodoName(), responseDto.getTodoName());
     }
 
     @Test
@@ -67,16 +67,16 @@ class CommentServiceTest {
     void updateComment() {
         // given
         Long userId = 100L;
-        User user = new User("abc123", "abc12345", UserRoleEnum.USER);
-        user.setId(userId);
+        User user = new User("abc123@naver.com", "abc123", "abc12345", UserRoleEnum.USER);
+        user.setUserId(userId);
 
-        TodoCard todoCard = new TodoCard(TodoCardRequestDto.builder().cardname("카드 이름")
-            .content("카드 내용").build(), user);
+        Todo todo = new Todo(TodoRequestDto.builder().todoName("Todo 이름")
+            .content("Todo 내용").build(), user);
 
         Long commentId = 100L;
         Comment comment = new Comment(CommentRequestDto.builder().content("댓글 내용").build(), user,
-            todoCard);
-        comment.setId(commentId);
+            todo);
+        comment.setCommentId(commentId);
         given(commentRepository.findById(commentId)).willReturn(Optional.of(comment));
 
         String content = "댓글 내용 수정";
@@ -88,8 +88,8 @@ class CommentServiceTest {
         // then
         assertNotNull(responseDto);
         assertEquals(content, responseDto.getContent());
-        assertEquals(user.getUsername(), responseDto.getUsername());
-        assertEquals(todoCard.getCardname(), responseDto.getCardname());
+        assertEquals(user.getUserName(), responseDto.getUserName());
+        assertEquals(todo.getTodoName(), responseDto.getTodoName());
     }
 
     @Test
@@ -97,16 +97,16 @@ class CommentServiceTest {
     void deleteComment() {
         // given
         Long userId = 100L;
-        User user = new User("abc123", "abc12345", UserRoleEnum.USER);
-        user.setId(userId);
+        User user = new User("abc123@naver.com", "abc123", "abc12345", UserRoleEnum.USER);
+        user.setUserId(userId);
 
-        TodoCard todoCard = new TodoCard(TodoCardRequestDto.builder().cardname("카드 이름")
-            .content("카드 내용").build(), user);
+        Todo todo = new Todo(TodoRequestDto.builder().todoName("Todo 이름")
+            .content("Todo 내용").build(), user);
 
         Long commentId = 100L;
         Comment comment = new Comment(CommentRequestDto.builder().content("댓글 내용").build(), user,
-            todoCard);
-        comment.setId(commentId);
+            todo);
+        comment.setCommentId(commentId);
         given(commentRepository.findById(commentId)).willReturn(Optional.of(comment));
 
         // when
