@@ -28,6 +28,17 @@ public class GlobalExceptionHandler {
                 .msg(ex.getMessage()).build());
     }
 
+    @ExceptionHandler(SignUpUserExistsException.class)
+    public ResponseEntity<ResponseMessage<Void>> handleSignUpUserExistsException(SignUpUserExistsException ex) {
+        System.out.println(ex.getMessage());
+
+        // 로직 처리 ...
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND.value())
+            .body(ResponseMessage.<Void>builder().httpCode(HttpStatus.NOT_FOUND.value())
+                .msg(ex.getMessage()).build());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseMessage<Void>> handleException(MethodArgumentNotValidException ex) {
 

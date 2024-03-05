@@ -4,6 +4,7 @@ import com.sparta.mytodo.dto.SignUpRequestDto;
 import com.sparta.mytodo.dto.UserResponseDto;
 import com.sparta.mytodo.entity.User;
 import com.sparta.mytodo.entity.UserRoleEnum;
+import com.sparta.mytodo.exception.SignUpUserExistsException;
 import com.sparta.mytodo.jwt.JwtUtil;
 import com.sparta.mytodo.repository.CommentRepository;
 import com.sparta.mytodo.repository.TodoCardRepository;
@@ -28,7 +29,7 @@ public class UserService {
         String password = passwordEncoder.encode(signUpRequestDto.getPassword());
 
         if(userRepository.findByUsername(username).isPresent()) {
-            throw new IllegalArgumentException("이미 존재하는 회원입니다.");
+            throw new SignUpUserExistsException("이미 존재하는 회원입니다.");
         }
 
         // 사용자 ROLE 확인
