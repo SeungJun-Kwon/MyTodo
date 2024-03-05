@@ -3,6 +3,7 @@ package com.sparta.mytodo.security.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.mytodo.dto.LoginRequestDto;
 import com.sparta.mytodo.entity.ResponseMessage;
+import com.sparta.mytodo.entity.User;
 import com.sparta.mytodo.entity.UserRoleEnum;
 import com.sparta.mytodo.jwt.JwtUtil;
 import com.sparta.mytodo.security.UserDetailsImpl;
@@ -46,10 +47,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
-        String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
+        User user = ((UserDetailsImpl) authResult.getPrincipal()).getUser();
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
-        String token = jwtUtil.createToken(username, role);
+        String token = jwtUtil.createToken(user, role);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
         response.getWriter().write(token);
     }
