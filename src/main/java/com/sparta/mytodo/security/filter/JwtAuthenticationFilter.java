@@ -34,7 +34,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            requestDto.getUsername(),
+                            requestDto.getEmail(),
                             requestDto.getPassword(),
                             null
                     )
@@ -63,7 +63,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.getWriter().write(
                 new ObjectMapper().writeValueAsString(ResponseMessage.builder()
                         .httpCode(400)
-                        .msg("로그인 실패! ID나 비밀번호를 확인해주세요.")
                         .data(null).build()
                 )
         );

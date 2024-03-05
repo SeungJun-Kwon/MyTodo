@@ -43,7 +43,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 res.getWriter().write(
                         new ObjectMapper().writeValueAsString(ResponseMessage.builder()
                                 .httpCode(400)
-                                .msg("토큰이 유효하지 않습니다.")
                                 .data(null).build()
                         )
                 );

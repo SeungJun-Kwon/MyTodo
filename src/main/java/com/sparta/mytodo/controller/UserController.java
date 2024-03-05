@@ -34,7 +34,6 @@ public class UserController {
         UserResponseDto dto = userService.signup(signUpRequestDto);
 
         return ResponseEntity.ok(ResponseMessage.builder()
-            .msg(signUpRequestDto.getUsername() + " 유저 회원 가입 완료")
             .httpCode(HttpStatus.OK.value())
             .data(dto)
             .build());

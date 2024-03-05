@@ -43,7 +43,8 @@ public class JwtUtil {
         Date date = new Date();
 
         return Jwts.builder()
-                .setSubject(user.getUsername()) // 사용자 식별자값(ID)
+                .setSubject(user.getEmail()) // 사용자 식별자값(Email)
+                .claim("userName", user.getUserName())
                 .claim(AUTHORIZATION_KEY, role) // 사용자 권한
                 .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
                 .setIssuedAt(date) // 발급일

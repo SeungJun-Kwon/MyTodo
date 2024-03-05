@@ -9,14 +9,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "users")
-public class User {
+@Table(name = "user")
+public class User extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String email;
+
+    @Column(nullable = false)
+    private String userName;
 
     @Column(nullable = false)
     private String password;
@@ -25,8 +28,9 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    public User(String username, String password, UserRoleEnum role) {
-        this.username = username;
+    public User(String email, String userName, String password, UserRoleEnum role) {
+        this.email = email;
+        this.userName = userName;
         this.password = password;
         this.role = role;
     }

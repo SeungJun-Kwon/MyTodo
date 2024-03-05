@@ -25,10 +25,11 @@ public class UserService {
 
     @Transactional
     public UserResponseDto signup(SignUpRequestDto signUpRequestDto) {
-        String username = signUpRequestDto.getUsername();
+        String email = signUpRequestDto.getEmail();
+        String userName = signUpRequestDto.getUserName();
         String password = passwordEncoder.encode(signUpRequestDto.getPassword());
 
-        if(userRepository.findByUsername(username).isPresent()) {
+        if(userRepository.findByEmail(email).isPresent()) {
             throw new SignUpUserExistsException("이미 존재하는 회원입니다.");
         }
 
@@ -41,7 +42,7 @@ public class UserService {
             role = UserRoleEnum.ADMIN;
         }
 
-        userRepository.save(new User(username, password, role));
-        return new UserResponseDto(username);
+        userRepository.save(new User(email, userName, password, role));
+        return new UserResponseDto(email, userName);
     }
 }
