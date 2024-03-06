@@ -49,6 +49,7 @@ public class JwtUtil {
 
         return Jwts.builder()
             .setSubject(user.getEmail()) // 사용자 식별자값(Email)
+            .claim("userId", user.getUserId())
             .claim("userName", user.getUserName())
             .claim(AUTHORIZATION_KEY, role) // 사용자 권한
             .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간

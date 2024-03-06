@@ -68,7 +68,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(
             new ObjectMapper().writeValueAsString(ExceptionResponseDto.builder()
-                .msg("로그인 실패 . . .")
+                .msg(failed.getMessage())
                 .httpCode(400)
                 .httpStatus(HttpStatus.BAD_REQUEST)
                 .build()
