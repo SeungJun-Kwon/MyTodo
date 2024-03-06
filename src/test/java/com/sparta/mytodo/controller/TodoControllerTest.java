@@ -2,6 +2,7 @@ package com.sparta.mytodo.controller;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -137,7 +138,7 @@ public class TodoControllerTest {
         // given
 
         // when-then
-        mockMvc.perform(put("/api/cards/100?finished=true")
+        mockMvc.perform(patch("/api/cards/100?finished=true")
                 .accept(MediaType.APPLICATION_JSON).principal(principal)).andExpect(status().isOk())
             .andDo(print());
     }
