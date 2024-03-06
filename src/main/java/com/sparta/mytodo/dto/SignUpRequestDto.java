@@ -12,7 +12,7 @@ import lombok.Getter;
 public class SignUpRequestDto {
 
     @NotBlank(message = "사용자 이메일이 공백이면 안됩니다.")
-    @Size(min = 20, max = 50, message = "사용자 이메일의 크기가 20에서 50 사이여야 합니다.")
+    @Size(min = 10, max = 50, message = "사용자 이메일의 크기가 20에서 50 사이여야 합니다.")
     @Email(message = "이메일 형식이 아닙니다.")
     private String email;
 

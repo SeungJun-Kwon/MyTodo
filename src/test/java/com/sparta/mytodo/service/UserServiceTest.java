@@ -28,10 +28,10 @@ public class UserServiceTest {
     @DisplayName("회원 가입")
     void signUp() {
         // given
-        String username = "abc123";
+        String userName = "abc123";
         String password = "abc12345";
 
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder().username(username)
+        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder().userName(userName)
             .password(password).build();
 
         UserService userService = new UserService(userRepository, passwordEncoder);
@@ -41,24 +41,24 @@ public class UserServiceTest {
 
         // then
         assertNotNull(userResponseDto);
-        assertEquals(username, userResponseDto.getUsername());
+        assertEquals(userName, userResponseDto.getUserName());
     }
 
     @Test
     @DisplayName("회원 가입 실패(유저 이미 존재)")
     void signUpUserExists() {
         // given
-        String username = "abc123";
+        String userName = "abc123";
         String password = "abc12345";
 
         User user = new User();
-        user.setId(100L);
-        user.setUsername(username);
+        user.setUserId(100L);
+        user.setUserName(userName);
         user.setPassword(password);
         user.setRole(UserRoleEnum.USER);
         userRepository.save(user);
 
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder().username(username)
+        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder().userName(userName)
             .password(password).build();
 
         UserService userService = new UserService(userRepository, passwordEncoder);

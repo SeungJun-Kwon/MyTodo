@@ -17,7 +17,7 @@ class SignUpRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("유저 이름 공백 테스트")
     void 유저이름공백() {
-        SignUpRequestDto requestDto = SignUpRequestDto.builder().username("").password("abcde123")
+        SignUpRequestDto requestDto = SignUpRequestDto.builder().userName("").password("abcde123")
             .build();
 
         validateAndCollectMessages(requestDto);
@@ -29,7 +29,7 @@ class SignUpRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("유저 이름 길이 테스트")
     void 유저이름길이1() {
-        SignUpRequestDto requestDto = SignUpRequestDto.builder().username("abc")
+        SignUpRequestDto requestDto = SignUpRequestDto.builder().userName("abc")
             .password("abcde123")
             .build();
 
@@ -41,7 +41,7 @@ class SignUpRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("유저 이름 길이 테스트")
     void 유저이름길이2() {
-        SignUpRequestDto requestDto = SignUpRequestDto.builder().username("abcde12345123")
+        SignUpRequestDto requestDto = SignUpRequestDto.builder().userName("abcde12345123")
             .password("abcde123")
             .build();
 
@@ -53,7 +53,7 @@ class SignUpRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("유저 이름 패턴 테스트")
     void 유저이름패턴() {
-        SignUpRequestDto requestDto = SignUpRequestDto.builder().username("유저이름123")
+        SignUpRequestDto requestDto = SignUpRequestDto.builder().userName("유저이름123")
             .password("abcde123")
             .build();
 
@@ -65,7 +65,7 @@ class SignUpRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("유저 비밀번호 공백 테스트")
     void 유저비밀번호공백() {
-        SignUpRequestDto requestDto = SignUpRequestDto.builder().username("abc123").password("")
+        SignUpRequestDto requestDto = SignUpRequestDto.builder().userName("abc123").password("")
             .build();
 
         validateAndCollectMessages(requestDto);
@@ -77,7 +77,7 @@ class SignUpRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("유저 비밀번호 길이 테스트")
     void 유저비밀번호길이1() {
-        SignUpRequestDto requestDto = SignUpRequestDto.builder().username("abc123")
+        SignUpRequestDto requestDto = SignUpRequestDto.builder().userName("abc123")
             .password("abc123")
             .build();
 
@@ -89,7 +89,7 @@ class SignUpRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("유저 이름 길이 테스트")
     void 유저비밀번호길이2() {
-        SignUpRequestDto requestDto = SignUpRequestDto.builder().username("abc123")
+        SignUpRequestDto requestDto = SignUpRequestDto.builder().userName("abc123")
             .password("abcde12345123123123")
             .build();
 
@@ -101,7 +101,7 @@ class SignUpRequestDtoTest extends DtoTest {
     @Test
     @DisplayName("유저 비밀번호 패턴 테스트")
     void 유저비밀번호패턴() {
-        SignUpRequestDto requestDto = SignUpRequestDto.builder().username("abc123")
+        SignUpRequestDto requestDto = SignUpRequestDto.builder().userName("abc123")
             .password("Abcd123!@#")
             .build();
 
