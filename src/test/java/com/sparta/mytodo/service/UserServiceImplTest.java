@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+public class UserServiceImplTest {
 
     @Mock
     UserRepository userRepository;
@@ -34,10 +34,10 @@ public class UserServiceTest {
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder().userName(userName)
             .password(password).build();
 
-        UserService userService = new UserService(userRepository, passwordEncoder);
+        UserServiceImpl userServiceImpl = new UserServiceImpl(userRepository, passwordEncoder);
 
         // when
-        UserResponseDto userResponseDto = userService.signup(signUpRequestDto);
+        UserResponseDto userResponseDto = userServiceImpl.signup(signUpRequestDto);
 
         // then
         assertNotNull(userResponseDto);
@@ -61,11 +61,11 @@ public class UserServiceTest {
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder().userName(userName)
             .password(password).build();
 
-        UserService userService = new UserService(userRepository, passwordEncoder);
+        UserServiceImpl userServiceImpl = new UserServiceImpl(userRepository, passwordEncoder);
 
         // when - then
         try {
-            UserResponseDto userResponseDto = userService.signup(signUpRequestDto);
+            UserResponseDto userResponseDto = userServiceImpl.signup(signUpRequestDto);
         } catch (SignUpUserExistsException ex) {
             assertEquals(ex.getMessage(), "이미 존재하는 회원입니다.");
         }

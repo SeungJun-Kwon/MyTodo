@@ -3,7 +3,7 @@ package com.sparta.mytodo.controller;
 import com.sparta.mytodo.dto.SignUpRequestDto;
 import com.sparta.mytodo.dto.UserResponseDto;
 import com.sparta.mytodo.entity.ResponseDto;
-import com.sparta.mytodo.service.UserService;
+import com.sparta.mytodo.service.UserServiceImpl;
 import com.sparta.mytodo.util.ValidationUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     @PostMapping("/signup")
     public ResponseEntity<ResponseDto<?>> signup(
@@ -31,7 +31,7 @@ public class UserController {
 
         ValidationUtil.validateRequestDto(bindingResult);
 
-        UserResponseDto dto = userService.signup(signUpRequestDto);
+        UserResponseDto dto = userServiceImpl.signup(signUpRequestDto);
 
         return ResponseEntity.ok(ResponseDto.builder()
             .httpCode(HttpStatus.OK.value())
