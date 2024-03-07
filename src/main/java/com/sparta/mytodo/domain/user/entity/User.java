@@ -24,7 +24,7 @@ import lombok.ToString;
 @ToString(exclude = {"password"})
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user")
+@Table(name = "USER_TB")
 public class User extends Timestamped {
 
     @Id

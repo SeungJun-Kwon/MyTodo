@@ -29,7 +29,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "comment")
+@Table(name = "COMMENT_TB")
 public class Comment extends Timestamped {
 
     @Id

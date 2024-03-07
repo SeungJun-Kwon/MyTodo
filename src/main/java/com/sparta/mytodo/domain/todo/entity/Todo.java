@@ -28,7 +28,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "todo")
+@Table(name = "TODO_TB")
 public class Todo extends Timestamped {
 
     @Id
