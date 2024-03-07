@@ -72,4 +72,15 @@ public class UserRepositoryTest extends RepositoryTest {
         assertNotNull(findUser);
         assertEquals(user.getEmail(), findUser.getEmail());
     }
+
+    @Test
+    void findByUserName() {
+        user = userRepository.save(new User("abc123@naver.com", "abc123", "abc123", UserRoleEnum.USER));
+        String userName = "abc123";
+
+        User findUser = userRepository.findByUserName(userName);
+
+        assertNotNull(findUser);
+        assertEquals(userName, findUser.getUserName());
+    }
 }
