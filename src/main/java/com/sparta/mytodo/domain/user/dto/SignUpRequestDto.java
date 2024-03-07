@@ -6,9 +6,11 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder
+@ToString(exclude = {"password", "isAdmin", "adminToken"})
 public class SignUpRequestDto {
 
     @NotBlank(message = "사용자 이메일이 공백이면 안됩니다.")
