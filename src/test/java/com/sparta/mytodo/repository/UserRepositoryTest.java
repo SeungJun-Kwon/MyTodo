@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import com.sparta.mytodo.entity.User;
-import com.sparta.mytodo.entity.UserRoleEnum;
+import com.sparta.mytodo.domain.user.entity.User;
+import com.sparta.mytodo.domain.user.repository.UserRepository;
+import com.sparta.mytodo.global.security.UserRoleEnum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

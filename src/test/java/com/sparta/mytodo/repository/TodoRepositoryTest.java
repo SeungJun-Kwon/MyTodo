@@ -4,10 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import com.sparta.mytodo.dto.TodoRequestDto;
-import com.sparta.mytodo.entity.Todo;
-import com.sparta.mytodo.entity.User;
-import com.sparta.mytodo.entity.UserRoleEnum;
+import com.sparta.mytodo.domain.todo.dto.TodoRequestDto;
+import com.sparta.mytodo.domain.todo.entity.Todo;
+import com.sparta.mytodo.domain.todo.repository.TodoRepository;
+import com.sparta.mytodo.domain.user.entity.User;
+import com.sparta.mytodo.domain.user.repository.UserRepository;
+import com.sparta.mytodo.global.security.UserRoleEnum;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

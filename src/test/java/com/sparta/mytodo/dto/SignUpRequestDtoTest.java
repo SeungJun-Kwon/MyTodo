@@ -2,6 +2,7 @@ package com.sparta.mytodo.dto;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.sparta.mytodo.domain.user.dto.SignUpRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

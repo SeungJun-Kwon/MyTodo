@@ -9,12 +9,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.mytodo.config.WebSecurityConfig;
-import com.sparta.mytodo.dto.TodoRequestDto;
-import com.sparta.mytodo.entity.User;
-import com.sparta.mytodo.entity.UserRoleEnum;
-import com.sparta.mytodo.security.UserDetailsImpl;
-import com.sparta.mytodo.service.TodoService;
+import com.sparta.mytodo.global.config.WebSecurityConfig;
+import com.sparta.mytodo.domain.todo.controller.TodoController;
+import com.sparta.mytodo.domain.todo.dto.TodoRequestDto;
+import com.sparta.mytodo.domain.user.entity.User;
+import com.sparta.mytodo.global.security.UserRoleEnum;
+import com.sparta.mytodo.global.security.UserDetailsImpl;
+import com.sparta.mytodo.domain.todo.service.TodoService;
 import java.security.Principal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
