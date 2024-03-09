@@ -1,0 +1,78 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+/* 추가적인 커스텀 스타일 */
+.container {
+    max-width: 600px; /* 원하는 최대 너비로 조정하세요 */
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #0084ff;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+a {
+    text-decoration: none;
+    color: #0084ff;
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 이미지 스타일 */
+.img-container {
+    text-align: center;
+}
+
+.img-container img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* 모바일 기기 등 화면 크기가 작은 경우를 위한 미디어 쿼리 */
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%; /* 작은 화면에서는 컨테이너의 너비를 늘립니다 */
+        padding: 10px;
+    }
+}

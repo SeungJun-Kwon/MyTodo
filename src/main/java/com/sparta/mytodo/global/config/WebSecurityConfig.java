@@ -65,6 +65,8 @@ public class WebSecurityConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                 .permitAll() // resources 접근 허용 설정
                 .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
+                .requestMatchers("/login").permitAll()
+                .requestMatchers("/signup").permitAll()
                 .requestMatchers("/api/users/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
                 .requestMatchers("/swagger*/**").permitAll()
                 .requestMatchers("/v3/api-docs/**").permitAll()
@@ -72,6 +74,11 @@ public class WebSecurityConfig {
                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**")
                 .hasRole("USER")
                 .anyRequest().authenticated() // 그 외 모든 요청 인증처리
+        );
+
+        http.formLogin(form -> form
+            .loginPage("/login")
+            .defaultSuccessUrl("/todo", true)
         );
 
         // 필터 관리

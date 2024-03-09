@@ -11,6 +11,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -57,7 +59,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String token = jwtUtil.createToken(user, role);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
-        response.getWriter().write(token);
+
+        // 사용자 정보를 응답에 포함
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("userId", user.getUserId());
+        responseData.put("userName", user.getUserName());
+        responseData.put("email", user.getEmail());
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(new ObjectMapper().writeValueAsString(responseData));
     }
 
     @Override
