@@ -28,15 +28,15 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/comments/card-id/{cardId}")
-    public ResponseEntity<ResponseDto<CommentResponseDto>> createComment(@PathVariable Long cardId,
+    @PostMapping("/comments/todo-id/{todoId}")
+    public ResponseEntity<ResponseDto<CommentResponseDto>> createComment(@PathVariable Long todoId,
         @Valid @RequestBody CommentRequestDto requestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         BindingResult bindingResult) {
 
         ValidationUtil.validateRequestDto(bindingResult);
 
-        CommentResponseDto responseDto = commentService.createComment(cardId, requestDto,
+        CommentResponseDto responseDto = commentService.createComment(todoId, requestDto,
             userDetails.getUser());
 
         return ResponseEntity.ok().body(
