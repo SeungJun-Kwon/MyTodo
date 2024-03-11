@@ -6,11 +6,56 @@
     <title>로그인</title>
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <link rel="stylesheet" href="/css/login.css"> <!-- CSS 파일 연결 -->
+    <script>
+        $(document).ready(function () {
+            // 토큰 삭제
+            Cookies.remove('Authorization', {path: '/'});
+        });
+
+        const href = location.href;
+        const queryString = href.substring(href.indexOf("?") + 1)
+        if (queryString === 'error') {
+            const errorDiv = document.getElementById('login-failed');
+            errorDiv.style.display = 'block';
+        }
+
+        const host = 'http://' + window.location.host;
+
+        function onLogin() {
+            let email = $('#email').val();
+            let password = $('#password').val();
+
+            $.ajax({
+                type: "POST",
+                url: `/api/users/login`,
+                contentType: "application/json",
+                data: JSON.stringify({email: email, password: password}),
+            })
+            .done(function (res, status, xhr) {
+                const token = xhr.getResponseHeader('Authorization');
+
+                Cookies.set('Authorization', token, {path: '/'})
+
+                $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+                    jqXHR.setRequestHeader('Authorization', token);
+                });
+
+                // 로그인 성공 시 Todo 페이지로 이동
+                window.location.href = host;
+            })
+            .fail(function (jqXHR, textStatus) {
+                alert("Login Fail");
+                window.location.href = '/?error=true';
+            });
+        }
+    </script>
 </head>
 <body>
-<script src="/js/login.js"></script> <!-- JavaScript 파일 연결 -->
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -26,9 +71,13 @@
                             <label for="password">비밀번호</label>
                             <input type="password" class="form-control" id="password" required>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">로그인</button>
+                        <button type="button" class="btn btn-primary btn-block" onclick="onLogin()">
+                            로그인
+                        </button>
                     </form>
-                    <div id="loginResult"></div>
+                </div>
+                <div id="login-failed" style="display:none" class="alert alert-danger" role="alert">
+                    로그인에 실패하였습니다.
                 </div>
             </div>
             <div class="text-center mt-3">

@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            fetch('/api/users/login', {
+            fetch(`/api/users/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,8 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('email', data.email);
                 localStorage.setItem('userName', data.userName);
-
-                window.location.href = '/todo.html';
             })
             .catch(error => {
                 $('#loginResult').html('Login failed.');

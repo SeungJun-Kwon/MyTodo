@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Todo List</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <link rel="stylesheet" href="/css/todo.css">
+    <script src="/js/basic.js"></script>
+    <script src="/js/todo.js"></script>
 </head>
 <body>
 <div class="container">
@@ -13,12 +19,10 @@
     <form id="todoForm">
         <input type="text" id="todoName" placeholder="Todo 제목" required>
         <textarea id="content" placeholder="Todo 내용" required></textarea>
-        <button type="submit">추가</button>
+        <button type="button" id="create-todo">추가</button>
     </form>
 
     <ul id="todoList"></ul>
 </div>
-
-<script src="/js/todo.js"></script>
 </body>
 </html>
