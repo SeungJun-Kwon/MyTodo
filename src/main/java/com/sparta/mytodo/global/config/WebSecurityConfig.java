@@ -76,9 +76,9 @@ public class WebSecurityConfig {
                 .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
-        http.formLogin(form -> form
-            .loginPage("/login")
-            .defaultSuccessUrl("/todo", true)
+        http.formLogin((formLogin) ->
+            formLogin
+                .loginPage("/login").permitAll()
         );
 
         // 필터 관리
