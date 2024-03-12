@@ -7,6 +7,11 @@ import com.sparta.mytodo.domain.user.entity.User;
 import com.sparta.mytodo.domain.todo.repository.TodoRepository;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,5 +82,18 @@ public class TodoService {
         }
 
         return todo;
+    }
+
+    public Page<TodoResponseDto> getTodosPaging(int page, int size, boolean isAsc, String sortBy) {
+
+        // 페이징 처리
+        Sort.Direction direction = isAsc ? Direction.ASC : Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        // 가져오기
+        Page<Todo> todoPage = todoRepository.findAll(pageable);
+
+        return todoPage.map(TodoResponseDto::new);
     }
 }

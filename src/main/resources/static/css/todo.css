@@ -62,3 +62,13 @@ li span {
     text-decoration: line-through;
     color: #999;
 }
+
+#pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#pagination button {
+    margin: 0 10px;
+}

@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
@@ -58,6 +59,23 @@ public class TodoController {
             ResponseDto.<List<TodoResponseDto>>builder()
                 .httpCode(200)
                 .data(responseDtoList).build()
+        );
+    }
+
+    @GetMapping("/todos/pages")
+    public ResponseEntity<ResponseDto<Page<TodoResponseDto>>> getTodosPaging(
+        @RequestParam int page,
+        @RequestParam int size,
+        @RequestParam boolean isAsc,
+        @RequestParam String sortBy
+    ) {
+
+        Page<TodoResponseDto> responseDtoPage = todoService.getTodosPaging(page - 1, size, isAsc, sortBy);
+
+        return ResponseEntity.ok().body(
+            ResponseDto.<Page<TodoResponseDto>>builder()
+                .httpCode(200)
+                .data(responseDtoPage).build()
         );
     }
 
