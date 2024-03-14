@@ -2,9 +2,9 @@ package com.sparta.mytodo.domain.todo.controller;
 
 import com.sparta.mytodo.domain.todo.dto.TodoRequestDto;
 import com.sparta.mytodo.domain.todo.dto.TodoResponseDto;
+import com.sparta.mytodo.domain.todo.service.TodoService;
 import com.sparta.mytodo.global.dto.ResponseDto;
 import com.sparta.mytodo.global.security.UserDetailsImpl;
-import com.sparta.mytodo.domain.todo.service.TodoService;
 import com.sparta.mytodo.global.util.ValidationUtil;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -70,7 +70,8 @@ public class TodoController {
         @RequestParam String sortBy
     ) {
 
-        Page<TodoResponseDto> responseDtoPage = todoService.getTodosPaging(page - 1, size, isAsc, sortBy);
+        Page<TodoResponseDto> responseDtoPage = todoService.getTodosPaging(page - 1, size, isAsc,
+            sortBy);
 
         return ResponseEntity.ok().body(
             ResponseDto.<Page<TodoResponseDto>>builder()
@@ -80,15 +81,20 @@ public class TodoController {
     }
 
     @GetMapping("/todos/user-id/{userId}")
-    public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getTodosByUser(
+    public ResponseEntity<ResponseDto<Page<TodoResponseDto>>> getTodosByUser(
         @PathVariable Long userId,
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "5") int size,
+        @RequestParam(defaultValue = "true") boolean isAsc,
+        @RequestParam(defaultValue = "createdAt") String sortBy,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        List<TodoResponseDto> responseDtoList = todoService.getTodosByUser(userId,
+        Page<TodoResponseDto> responseDtoList = todoService.getTodosByUser(userId, page - 1, size,
+            isAsc, sortBy,
             userDetails.getUser());
 
         return ResponseEntity.ok().body(
-            ResponseDto.<List<TodoResponseDto>>builder()
+            ResponseDto.<Page<TodoResponseDto>>builder()
                 .httpCode(200)
                 .data(responseDtoList).build()
         );

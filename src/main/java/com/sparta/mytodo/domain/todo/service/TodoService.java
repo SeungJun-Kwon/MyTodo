@@ -3,8 +3,8 @@ package com.sparta.mytodo.domain.todo.service;
 import com.sparta.mytodo.domain.todo.dto.TodoRequestDto;
 import com.sparta.mytodo.domain.todo.dto.TodoResponseDto;
 import com.sparta.mytodo.domain.todo.entity.Todo;
-import com.sparta.mytodo.domain.user.entity.User;
 import com.sparta.mytodo.domain.todo.repository.TodoRepository;
+import com.sparta.mytodo.domain.user.entity.User;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,19 +26,23 @@ public class TodoService {
 
         todoRepository.save(todo);
 
-        return new TodoResponseDto(todo);
+        return new TodoResponseDto(todo, user);
     }
 
-    public List<TodoResponseDto> getTodosByUser(Long userId, User user) {
+    public Page<TodoResponseDto> getTodosByUser(Long userId, int page, int size, boolean isAsc,
+        String sortBy, User user) {
         if (!userId.equals(user.getUserId())) {
             throw new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
         }
 
-        List<Todo> todos = todoRepository.findAllByUser(user).orElseThrow(
-            () -> new NullPointerException("Todo 가 존재하지 않습니다.")
-        );
+        // 페이징 처리
+        Sort.Direction direction = isAsc ? Direction.ASC : Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-        return todos.stream().map(TodoResponseDto::new).toList();
+        Page<Todo> todos = todoRepository.findAllByUser(user, pageable);
+
+        return todos.map(todo -> new TodoResponseDto(todo, user));
     }
 
     public List<TodoResponseDto> getTodos() {
@@ -46,7 +50,7 @@ public class TodoService {
             () -> new NullPointerException("Todo 가 존재하지 않습니다.")
         );
 
-        return todos.stream().map(TodoResponseDto::new).toList();
+        return todos.stream().map(todo -> new TodoResponseDto(todo, todo.getUser())).toList();
     }
 
     @Transactional
@@ -56,7 +60,7 @@ public class TodoService {
         todo.setTodoName(requestDto.getTodoName());
         todo.setContent(requestDto.getContent());
 
-        return new TodoResponseDto(todo);
+        return new TodoResponseDto(todo, user);
     }
 
     @Transactional
@@ -65,7 +69,7 @@ public class TodoService {
 
         todo.setFinished(finished);
 
-        return new TodoResponseDto(todo);
+        return new TodoResponseDto(todo, user);
     }
 
     private Todo validateTodo(Long todoId, User user) {
@@ -94,6 +98,6 @@ public class TodoService {
         // 가져오기
         Page<Todo> todoPage = todoRepository.findAll(pageable);
 
-        return todoPage.map(TodoResponseDto::new);
+        return todoPage.map(todo -> new TodoResponseDto(todo, todo.getUser()));
     }
 }
