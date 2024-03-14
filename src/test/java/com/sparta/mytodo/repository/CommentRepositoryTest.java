@@ -5,17 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.sparta.mytodo.domain.comment.dto.CommentRequestDto;
-import com.sparta.mytodo.domain.comment.repository.CommentRepository;
-import com.sparta.mytodo.domain.todo.dto.TodoRequestDto;
 import com.sparta.mytodo.domain.comment.entity.Comment;
+import com.sparta.mytodo.domain.comment.repository.CommentRepository;
 import com.sparta.mytodo.domain.todo.entity.Todo;
 import com.sparta.mytodo.domain.todo.repository.TodoRepository;
 import com.sparta.mytodo.domain.user.entity.User;
 import com.sparta.mytodo.domain.user.repository.UserRepository;
-import com.sparta.mytodo.global.security.UserRoleEnum;
 import jakarta.persistence.EntityListeners;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,22 +27,6 @@ class CommentRepositoryTest extends RepositoryTest {
     @Autowired
     TodoRepository todoRepository;
 
-    private static User user;
-    private static Todo todo;
-
-    @BeforeAll
-    static void beforeAll() {
-        user = new User("abc123@naver.com", "abc123", "abc123", UserRoleEnum.USER);
-        todo = new Todo(
-            TodoRequestDto.builder().todoName("Todo 이름").content("Todo 내용").build(), user);
-    }
-
-    @BeforeEach
-    void setUp() {
-//        userRepository.save(user);
-//        todoRepository.save(todo);
-    }
-
     @Test
     @DisplayName("Comment 생성")
     void createComment() {
@@ -55,22 +35,19 @@ class CommentRepositoryTest extends RepositoryTest {
         comment.setContent(content);
         comment.setUser(User.builder().userId(100L).build());
         comment.setTodo(Todo.builder().todoId(100L).build());
-//        comment.setUser(user);
-//        comment.setTodo(todo);
 
         Comment createdComment = commentRepository.save(comment);
 
         assertNotNull(createdComment);
         assertEquals(content, createdComment.getContent());
-//        assertEquals(user, createdComment.getUser());
-//        assertEquals(todo, createdComment.getTodo());
     }
 
     @Test
     @DisplayName("Comment 수정")
     void updateComment() {
-        Comment comment = new Comment(CommentRequestDto.builder().content("댓글 내용").build(), user,
-            todo);
+        Comment comment = new Comment(CommentRequestDto.builder().content("댓글 내용").build(),
+            User.builder().userId(100L).build(),
+            Todo.builder().todoId(100L).build());
         commentRepository.save(comment);
 
         String content = "내용 수정";
@@ -84,8 +61,9 @@ class CommentRepositoryTest extends RepositoryTest {
     @Test
     @DisplayName("Comment 삭제")
     void deleteComment() {
-        Comment comment = new Comment(CommentRequestDto.builder().content("댓글 내용").build(), user,
-            todo);
+        Comment comment = new Comment(CommentRequestDto.builder().content("댓글 내용").build(),
+            User.builder().userId(100L).build(),
+            Todo.builder().todoId(100L).build());
         commentRepository.save(comment);
 
         if (commentRepository.findById(comment.getCommentId()).isPresent()) {

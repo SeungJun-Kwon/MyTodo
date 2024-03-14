@@ -139,7 +139,7 @@ public class TodoControllerTest {
         // given
 
         // when-then
-        mockMvc.perform(patch("/api/cards/100?finished=true")
+        mockMvc.perform(patch("/api/todos/100?finished=true")
                 .accept(MediaType.APPLICATION_JSON).principal(principal)).andExpect(status().isOk())
             .andDo(print());
     }

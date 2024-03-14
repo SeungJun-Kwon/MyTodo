@@ -104,7 +104,7 @@ class CommentControllerTest {
 
         // when-then
         mockMvc.perform(
-                post("/api/comments/card-id/100").content(postInfo)
+                post("/api/comments/todo-id/100").content(postInfo)
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON).principal(principal)).andExpect(status().isOk())
             .andDo(print());
