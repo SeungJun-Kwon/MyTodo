@@ -7,10 +7,10 @@ import static org.mockito.BDDMockito.given;
 import com.sparta.mytodo.domain.todo.dto.TodoRequestDto;
 import com.sparta.mytodo.domain.todo.dto.TodoResponseDto;
 import com.sparta.mytodo.domain.todo.entity.Todo;
+import com.sparta.mytodo.domain.todo.repository.TodoRepository;
 import com.sparta.mytodo.domain.todo.service.TodoService;
 import com.sparta.mytodo.domain.user.entity.User;
 import com.sparta.mytodo.global.security.UserRoleEnum;
-import com.sparta.mytodo.domain.todo.repository.TodoRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +20,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 @ExtendWith(MockitoExtension.class)
 class TodoServiceTest {
@@ -61,6 +67,45 @@ class TodoServiceTest {
         User user = new User("abc123@naver.com", "abc123", "abc12345", UserRoleEnum.USER);
         user.setUserId(userId);
 
+        List<Todo> todoList = new ArrayList<>();
+
+        for (int i = 0; i < 100; i++) {
+            todoList.add(new Todo(TodoRequestDto.builder().todoName("Todo 이름" + (i + 1))
+                .content("Todo 내용" + (i + 1)).build(), user));
+        }
+
+        int page = 0;
+        int size = 5;
+        boolean isAsc = true;
+        String sortBy = "createdAt";
+
+        // 페이징 처리
+        Sort.Direction direction = Direction.ASC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Todo> todoPage = new PageImpl<>(todoList, pageable, todoList.size());
+
+        given(todoRepository.findAllByUser(user, pageable)).willReturn(todoPage);
+
+        // when
+        Page<TodoResponseDto> result = todoService.getTodosByUser(userId, page, size, isAsc, sortBy,
+            user);
+
+        // then
+        assertEquals(todoList.size(), result.getTotalElements());
+        assertEquals("Todo 이름1", result.getContent().get(0).getTodoName());
+        assertEquals("Todo 이름2", result.getContent().get(1).getTodoName());
+    }
+
+    @Test
+    @DisplayName("Get Todos")
+    void getTodos() {
+        // given
+        Long userId = 100L;
+        User user = new User("abc123@naver.com", "abc123", "abc12345", UserRoleEnum.USER);
+        user.setUserId(userId);
+
         Todo todo1 = new Todo(TodoRequestDto.builder().todoName("Todo 이름1")
             .content("Todo 내용1").build(), user);
         Todo todo2 = new Todo(TodoRequestDto.builder().todoName("Todo 이름2")
@@ -70,13 +115,13 @@ class TodoServiceTest {
         todoList.add(todo1);
         todoList.add(todo2);
 
-        given(todoRepository.findAllByUser(user)).willReturn(Optional.of(todoList));
+        given(todoRepository.findAllByOrderByUser()).willReturn(Optional.of(todoList));
 
         // when
-        List<TodoResponseDto> findTodoTodoDtoList = todoService.getTodosByUser(userId,
-            user);
+        List<TodoResponseDto> findTodoTodoDtoList = todoService.getTodos();
 
         List<Todo> findTodoList = new ArrayList<>();
+
         for (TodoResponseDto dto : findTodoTodoDtoList) {
             findTodoList.add(new Todo(
                 TodoRequestDto.builder().todoName(dto.getTodoName()).content(dto.getContent())
@@ -92,8 +137,8 @@ class TodoServiceTest {
     }
 
     @Test
-    @DisplayName("Get Todos")
-    void getTodos() {
+    @DisplayName("Get Todos Paging")
+    void getTodosPaging() {
         // given
         Long userId = 100L;
         User user = new User("abc123@naver.com", "abc123", "abc12345", UserRoleEnum.USER);
