@@ -1,7 +1,6 @@
 package com.sparta.mytodo.global.security;
 
 import com.sparta.mytodo.domain.user.entity.User;
-import com.sparta.mytodo.global.security.UserRoleEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
