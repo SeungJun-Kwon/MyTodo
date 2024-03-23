@@ -1,5 +1,6 @@
 package com.sparta.mytodo.domain.todo.service;
 
+import com.sparta.mytodo.domain.comment.service.CommentService;
 import com.sparta.mytodo.domain.todo.dto.TodoRequestDto;
 import com.sparta.mytodo.domain.todo.dto.TodoResponseDto;
 import com.sparta.mytodo.domain.todo.entity.Todo;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TodoService {
 
     private final TodoRepository todoRepository;
+    private final CommentService commentService;
 
     public TodoResponseDto createTodo(TodoRequestDto requestDto, User user) {
         Todo todo = new Todo(requestDto, user);

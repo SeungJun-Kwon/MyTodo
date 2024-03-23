@@ -3,10 +3,12 @@ package com.sparta.mytodo.domain.comment.service;
 import com.sparta.mytodo.domain.comment.dto.CommentRequestDto;
 import com.sparta.mytodo.domain.comment.dto.CommentResponseDto;
 import com.sparta.mytodo.domain.comment.entity.Comment;
-import com.sparta.mytodo.domain.todo.entity.Todo;
-import com.sparta.mytodo.domain.user.entity.User;
 import com.sparta.mytodo.domain.comment.repository.CommentRepository;
+import com.sparta.mytodo.domain.todo.entity.Todo;
 import com.sparta.mytodo.domain.todo.repository.TodoRepository;
+import com.sparta.mytodo.domain.user.entity.User;
+import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +49,20 @@ public class CommentService {
         commentRepository.deleteById(commentId);
 
         return commentId;
+    }
+
+    @Transactional(readOnly = true)
+    public CommentResponseDto getComment(Long commentId) {
+        return commentRepository.findById(commentId)
+            .map(CommentResponseDto::new).orElseThrow(
+                () -> new NoSuchElementException("존재하지 않는 댓글입니다.")
+            );
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommentResponseDto> getCommentByTodoId(Long todoId) {
+        return commentRepository.findAllByTodoId(todoId).stream().map(CommentResponseDto::new)
+            .toList();
     }
 
     private Comment validateComment(Long commentId, User user) {
