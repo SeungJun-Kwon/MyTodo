@@ -1,8 +1,8 @@
 package com.sparta.mytodo.domain.todo.entity;
 
 import com.sparta.mytodo.domain.todo.dto.TodoRequestDto;
-import com.sparta.mytodo.global.entity.Timestamped;
 import com.sparta.mytodo.domain.user.entity.User;
+import com.sparta.mytodo.global.entity.Timestamped;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
@@ -11,6 +11,7 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -28,7 +29,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "TODO_TB")
+@Table(name = "TODO_TB", indexes = {@Index(name = "idx_todo_user_id", columnList = "user_id")})
 public class Todo extends Timestamped {
 
     @Id
