@@ -103,8 +103,6 @@ function createTodo(event) {
     const todoName = $('#todoName').val();
     const content = $('#content').val();
 
-    console.log(`${todoName} ${content}`)
-
     $.ajax({
         url: '/api/todos',
         type: 'POST',

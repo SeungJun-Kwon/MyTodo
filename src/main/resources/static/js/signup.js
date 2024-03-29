@@ -20,7 +20,7 @@ $(document).ready(function() {
             success: function(data) {
                 if (data.httpCode === 200) {
                     // 회원가입 성공 처리
-                    window.location.href = '/login.html';
+                    window.location.href = '/login';
                 } else {
                     // 회원가입 실패 처리
                     alert(data.message);

@@ -15,4 +15,9 @@ public class HomeController {
     public String signup() {
         return "signup";
     }
+
+    @GetMapping("/chatting")
+    public String chatting() {
+        return "chatting";
+    }
 }
