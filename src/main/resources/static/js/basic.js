@@ -1,25 +1,27 @@
 const host = 'http://' + window.location.host;
 
-$(document).ready(function() {
-    const auth = getToken();
+$(function() {
+    const token = getToken();
 
-    if (auth !== undefined && auth !== '') {
-        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-            jqXHR.setRequestHeader('Authorization', auth);
+    if (token !== undefined && token !== '') {
+        // Ajax 요청 시 헤더에 토큰 설정
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', token);
+            }
         });
     } else {
         window.location.href = host + `/login`;
-        return;
     }
 })
 
 function getToken() {
 
-    let auth = Cookies.get('Authorization');
+    let token = Cookies.get('Authorization');
 
-    if(auth === undefined) {
+    if(token === undefined) {
         return '';
     }
 
-    return auth;
+    return token;
 }
