@@ -22,17 +22,17 @@ public class Message {
     private Long messageId;
 
     @Column(nullable = false)
-    private String userName;
+    private String content;
 
     @Column(nullable = false)
-    private String content;
+    private Long userId;
 
     @Column(nullable = false)
     private Long roomId;
 
-    public Message(String userName, String content, Long roomId) {
-        this.userName = userName;
+    public Message(String content, Long userId, Long roomId) {
         this.content = content;
+        this.userId = userId;
         this.roomId = roomId;
     }
 }
