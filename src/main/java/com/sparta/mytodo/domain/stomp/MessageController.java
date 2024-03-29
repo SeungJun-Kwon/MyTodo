@@ -3,9 +3,9 @@ package com.sparta.mytodo.domain.stomp;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,14 +18,18 @@ public class MessageController {
 
     @MessageMapping("/chat-rooms/{roomId}/messages")
     @SendTo("/topic/chat-rooms/{roomId}")
-    public Message sendMessage(@DestinationVariable Long roomId, Message message) throws Exception {
+    public GetMessageResponse sendMessage(
+        @DestinationVariable Long roomId,
+        CreateMessageRequest request,
+        @Header("Authorization") String token
+    ) throws Exception {
         Thread.sleep(500); // 지연 시뮬레이션
 
-        return messageService.createMessage(roomId, message);
+        return messageService.createMessage(roomId, request, token);
     }
 
-    @GetMapping("/api/messages/{roomId}")
-    public List<Message> getRoomMessages(@PathVariable Long roomId) {
+    @GetMapping("/api/chat-rooms/{roomId}/messages")
+    public List<GetMessageResponse> getRoomMessages(@PathVariable Long roomId) {
         return messageService.getRoomMessages(roomId);
     }
 }
