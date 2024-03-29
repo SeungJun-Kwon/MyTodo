@@ -9,6 +9,9 @@ import lombok.Setter;
 @Builder
 public class ResponseDto<T> {
 
-    int httpCode;
     T data;
+
+    public static <T> ResponseDto<T> ofData(T data) {
+        return ResponseDto.<T>builder().data(data).build();
+    }
 }
