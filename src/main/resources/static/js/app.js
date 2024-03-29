@@ -1,4 +1,6 @@
 let currentRoomId = 0;
+let messageList;
+let messageInput;
 
 // STOMP 클라이언트 초기화
 const stompClient = new StompJs.Client({
@@ -10,6 +12,7 @@ stompClient.onConnect = (frame) => {
     console.log('Connected: ' + frame);
     setConnected(true);
     currentRoomId = $("#roomId").val();
+    getRoomMessages(currentRoomId);
     stompClient.subscribe(`/topic/chat-rooms/${currentRoomId}`,
         onMessageReceived); // 서버로부터 받은 메시지(Body)를 보여줌
 };
@@ -25,6 +28,34 @@ stompClient.onStompError = (frame) => {
     console.error('Additional details: ' + frame.body);
 };
 
+// 방에 있는 모든 메시지
+function getRoomMessages(roomId) {
+    $.ajax({
+        url: "/api/messages/" + roomId,
+        type: "GET",
+        dataType: "json",
+        success: function (messages) {
+            // 메시지 목록 처리 로직 작성
+            messages.forEach(function (message) {
+                // 각 메시지에 대한 처리 로직 작성
+                console.log("Message: " + message.content);
+                // 메시지를 화면에 출력하거나 다른 작업 수행
+                const messageRow = `
+                    <tr>
+                        <td>${message.userName}</td>
+                        <td>${message.content}</td>
+                    </tr>
+                `;
+                messageList.append(messageRow);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error(
+                "Failed to retrieve room messages. Status: " + status);
+        }
+    });
+}
+
 // 메시지 수신
 function onMessageReceived(payload) {
     const message = JSON.parse(payload.body);
@@ -34,7 +65,7 @@ function onMessageReceived(payload) {
             <td>${message.content}</td>
         </tr>
     `;
-    $("#messageList").append(messageRow);
+    messageList.append(messageRow);
 }
 
 // 연결에 따른 UI 설정
@@ -49,18 +80,18 @@ function setConnected(connected) {
         $("#messageTable").hide();
     }
 
-    $("#messageList").html("");
+    messageList.html("");
 }
 
 // 메세지 보내는 함수
 function sendMessage() {
     const userName = $("#userName").val();
-    const content = $("#messageInput").val();
+    const content = messageInput.val();
     stompClient.publish({
-        destination: `/app/messages/${currentRoomId}`,
+        destination: `/app/chat-rooms/${currentRoomId}/messages`,
         body: JSON.stringify({'userName': userName, 'content': content})
     });
-    $("#messageInput").val("");
+    messageInput.val("");
 }
 
 // STOMP 에 웹소켓 연결 활성화
@@ -75,7 +106,26 @@ function disconnect() {
     console.log("Disconnected");
 }
 
+// 방 목록 가져오기 함수
+function getRoomList() {
+    $.get("/api/chat-rooms", function (data) {
+        var roomListUl = $("#room-list-ul");
+        roomListUl.empty();
+        data.forEach(function (room) {
+            var li = $("<li></li>").text(room.name);
+            li.click(function () {
+                roomId = room.id;
+                connectToRoom();
+            });
+            roomListUl.append(li);
+        });
+    });
+}
+
 $(function () {
+    messageList = $("#messageList");
+    messageInput = $("#messageInput");
+
     $("#joinRoom").click(function () {
         currentRoomId = $("#roomId").val();
         connect();

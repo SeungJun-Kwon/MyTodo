@@ -1,5 +1,6 @@
 package com.sparta.mytodo.domain.stomp;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,5 +21,9 @@ public class MessageService {
 
         return messageRepository.save(
             new Message(message.getUserName(), message.getContent(), roomId));
+    }
+
+    public List<Message> getRoomMessages(Long roomId) {
+        return messageRepository.findAllByRoomId(roomId);
     }
 }
