@@ -11,7 +11,6 @@ const stompClient = new StompJs.Client({
 stompClient.onConnect = (frame) => {
     console.log('Connected: ' + frame);
     setConnected(true);
-    currentRoomId = $("#roomId").val();
     getRoomMessages(currentRoomId);
     stompClient.subscribe(`/topic/chat-rooms/${currentRoomId}`,
         onMessageReceived); // 서버로부터 받은 메시지(Body)를 보여줌
@@ -31,15 +30,12 @@ stompClient.onStompError = (frame) => {
 // 방에 있는 모든 메시지
 function getRoomMessages(roomId) {
     $.ajax({
-        url: "/api/messages/" + roomId,
+        url: `/api/chat-rooms/${roomId}/messages`,
         type: "GET",
         dataType: "json",
         success: function (messages) {
             // 메시지 목록 처리 로직 작성
             messages.forEach(function (message) {
-                // 각 메시지에 대한 처리 로직 작성
-                console.log("Message: " + message.content);
-                // 메시지를 화면에 출력하거나 다른 작업 수행
                 const messageRow = `
                     <tr>
                         <td>${message.userName}</td>
@@ -70,14 +66,13 @@ function onMessageReceived(payload) {
 
 // 연결에 따른 UI 설정
 function setConnected(connected) {
-    $("#joinRoom").prop("disabled", connected);
-    $("#exitRoom").prop("disabled", !connected);
-    $("#sendMessage").prop("disabled", !connected);
-
-    if (connected) {
-        $("#messageTable").show();
-    } else {
-        $("#messageTable").hide();
+    if(connected) {
+        $("#room-list").hide();
+        $("#chat-area").show();
+    }
+    else if(!connected) {
+        $("#room-list").show();
+        $("#chat-area").hide();
     }
 
     messageList.html("");
@@ -85,11 +80,11 @@ function setConnected(connected) {
 
 // 메세지 보내는 함수
 function sendMessage() {
-    const userName = $("#userName").val();
     const content = messageInput.val();
     stompClient.publish({
         destination: `/app/chat-rooms/${currentRoomId}/messages`,
-        body: JSON.stringify({'userName': userName, 'content': content})
+        headers: {Authorization: getToken()},
+        body: JSON.stringify({'content': content})
     });
     messageInput.val("");
 }
@@ -108,28 +103,67 @@ function disconnect() {
 
 // 방 목록 가져오기 함수
 function getRoomList() {
-    $.get("/api/chat-rooms", function (data) {
-        var roomListUl = $("#room-list-ul");
-        roomListUl.empty();
-        data.forEach(function (room) {
-            var li = $("<li></li>").text(room.name);
-            li.click(function () {
-                roomId = room.id;
-                connectToRoom();
+    $.ajax({
+        url: "/api/chat-rooms",
+        type: "GET",
+        dataType: "json",
+        success: function (rooms) {
+            let roomListUl = $("#room-list-ul");
+            roomListUl.empty();
+            rooms.forEach(function (room) {
+                let li = $("<li></li>");
+                let roomInfo = $("<div></div>").html(`
+                    방 번호: ${room.chatRoomId}<br>
+                    방 이름: ${room.chatRoomName}<br>
+                    방장: ${room.userName}<br>
+                    설명: ${room.description}
+                `);
+                let enterButton = $("<button></button>").text("입장").addClass(
+                    "btn btn-primary btn-sm");
+                enterButton.click(function () {
+                    currentRoomId = room.chatRoomId;
+                    connect();
+                });
+                li.append(roomInfo);
+                li.append(enterButton);
+                roomListUl.append(li);
             });
-            roomListUl.append(li);
-        });
+        },
+        error: function (xhr, status, error) {
+            console.error(
+                "Failed to retrieve room messages. Status: " + status);
+        }
+    });
+}
+
+// 방 생성 함수
+function createRoom() {
+    let roomName = $("#new-room-name").val();
+    let roomDesc = $("#new-room-desc").val();
+
+    $.ajax({
+        url: "/api/chat-rooms",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            chatRoomName: roomName,
+            description: roomDesc,
+            coverImage: ""
+        }),
+        success: function (createdRoom) {
+            $("#new-room-name").val("");
+            $("#new-room-desc").val("");
+            getRoomList();
+        },
+        error: function (error) {
+            console.error("Failed to create room: " + error);
+        }
     });
 }
 
 $(function () {
     messageList = $("#messageList");
     messageInput = $("#messageInput");
-
-    $("#joinRoom").click(function () {
-        currentRoomId = $("#roomId").val();
-        connect();
-    });
 
     $("#exitRoom").click(function () {
         disconnect();
@@ -138,4 +172,10 @@ $(function () {
     $("#sendMessage").click(function () {
         sendMessage();
     })
+
+    $("#create-room").click(function () {
+        createRoom();
+    })
+
+    getRoomList();
 });
