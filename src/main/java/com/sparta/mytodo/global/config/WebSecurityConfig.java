@@ -73,7 +73,8 @@ public class WebSecurityConfig {
                 .requestMatchers("/v3/api-docs").permitAll()
                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**")
                 .hasRole("USER")
-                .anyRequest().authenticated() // 그 외 모든 요청 인증처리
+                .anyRequest().permitAll()
+//                .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
         http.formLogin((formLogin) ->
