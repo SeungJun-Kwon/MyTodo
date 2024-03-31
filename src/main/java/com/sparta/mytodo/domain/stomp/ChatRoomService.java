@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
+    private final MemberRepository memberRepository;
 
     public List<GetChatRoomResponse> getChatRooms() {
         return chatRoomRepository.findAll().stream()
@@ -28,5 +29,12 @@ public class ChatRoomService {
         );
 
         return new GetChatRoomResponse(user.getUserName(), chatRoom);
+    }
+
+    public Long enterChatRoom(Long chatRoomId, User user) {
+        Member member = memberRepository.save(
+            Member.builder().chatRoomId(chatRoomId).userId(user.getUserId()).build());
+
+        return member.getMemberId();
     }
 }

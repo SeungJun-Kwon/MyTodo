@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,10 +23,16 @@ public class ChatRoomController {
     }
 
     @PostMapping("/api/chat-rooms")
-    @ResponseBody
     public GetChatRoomResponse createChatRoom(
         @RequestBody CreateChatRoomRequest request,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return chatRoomService.createChatRoom(request, userDetails.getUser());
+    }
+
+    @PostMapping("/api/chat-rooms/{chatRoomId}")
+    public Long enterChatRoom(
+        @PathVariable Long chatRoomId,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return chatRoomService.enterChatRoom(chatRoomId, userDetails.getUser());
     }
 }
