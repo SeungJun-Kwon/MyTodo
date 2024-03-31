@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,5 +33,11 @@ public class ChatRoomController {
         @PathVariable Long chatRoomId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return chatRoomService.enterChatRoom(chatRoomId, userDetails.getUser());
+    }
+
+    @GetMapping("/api/chat-rooms/my-rooms")
+    public List<GetChatRoomResponse> getMyChatRooms(
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return chatRoomService.getMyChatRooms(userDetails.getUser());
     }
 }

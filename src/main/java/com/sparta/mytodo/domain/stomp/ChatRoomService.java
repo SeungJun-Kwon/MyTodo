@@ -28,6 +28,9 @@ public class ChatRoomService {
                 .build()
         );
 
+        memberRepository.save(
+            Member.builder().chatRoomId(chatRoom.getChatRoomId()).userId(user.getUserId()).build());
+
         return new GetChatRoomResponse(user.getUserName(), chatRoom);
     }
 
@@ -36,5 +39,11 @@ public class ChatRoomService {
             Member.builder().chatRoomId(chatRoomId).userId(user.getUserId()).build());
 
         return member.getMemberId();
+    }
+
+    public List<GetChatRoomResponse> getMyChatRooms(User user) {
+        return chatRoomRepository.findAllByMember(user.getUserId()).stream()
+            .map(chatRoom -> new GetChatRoomResponse(chatRoom.getUser().getUserName(), chatRoom))
+            .toList();
     }
 }
