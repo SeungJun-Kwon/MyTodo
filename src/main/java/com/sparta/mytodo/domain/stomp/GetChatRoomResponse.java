@@ -1,5 +1,8 @@
 package com.sparta.mytodo.domain.stomp;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +19,7 @@ public class GetChatRoomResponse {
     private String chatRoomName;
     private String description;
     private String coverImage;
+    private List<String> chatRoomTags = new ArrayList<>();
 
     public GetChatRoomResponse(String userName, ChatRoom chatRoom) {
         this.userName = userName;
@@ -23,5 +27,6 @@ public class GetChatRoomResponse {
         chatRoomName = chatRoom.getChatRoomName();
         description = chatRoom.getDescription();
         coverImage = chatRoom.getDescription();
+        chatRoomTags = Arrays.stream(chatRoom.getChatRoomTag().split(",")).toList();
     }
 }

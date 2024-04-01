@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,8 +18,9 @@ public class ChatRoomController {
     private final ChatRoomService chatRoomService;
 
     @GetMapping("/api/chat-rooms")
-    public List<GetChatRoomResponse> getChatRooms() {
-        return chatRoomService.getChatRooms();
+    public List<GetChatRoomResponse> getChatRooms(
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return chatRoomService.getChatRooms(userDetails.getUser());
     }
 
     @PostMapping("/api/chat-rooms")
@@ -39,5 +41,19 @@ public class ChatRoomController {
     public List<GetChatRoomResponse> getMyChatRooms(
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return chatRoomService.getMyChatRooms(userDetails.getUser());
+    }
+
+    @GetMapping("/api/chat-rooms/search-keyword")
+    public List<GetChatRoomResponse> searchChatRoomsByKeyword(
+        @RequestParam(name = "keyword") String keyword
+    ) {
+        return chatRoomService.searchChatRoomsByKeyword(keyword);
+    }
+
+    @GetMapping("/api/chat-rooms/search-tag")
+    public List<GetChatRoomResponse> searchChatRoomsByTag(
+        @RequestParam(name = "tag") String tag
+    ) {
+        return chatRoomService.searchChatRoomsByTag(tag);
     }
 }

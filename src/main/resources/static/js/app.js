@@ -108,7 +108,57 @@ function getRoomList() {
         type: "GET",
         dataType: "json",
         success: function (rooms) {
-            let roomListUl = $("#room-list-ul");
+            let roomListUl = $("#find-rooms-list");
+            roomListUl.empty();
+            rooms.forEach(function (room) {
+                let li = $("<li></li>");
+                let roomInfo = $("<div></div>").html(`
+                    방 번호: ${room.chatRoomId}<br>
+                    방 이름: ${room.chatRoomName}<br>
+                    방장: ${room.userName}<br>
+                    설명: ${room.description}
+                `);
+                let enterButton = $("<button></button>").text("입장").addClass(
+                    "btn btn-primary btn-sm");
+                enterButton.click(function () {
+                    enterRoom(room.chatRoomId);
+                });
+                li.append(roomInfo);
+                li.append(enterButton);
+                roomListUl.append(li);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error(
+                "Failed to retrieve room messages. Status: " + status);
+        }
+    });
+}
+
+function enterRoom(roomId) {
+    $.ajax({
+        url: "/api/chat-rooms/" + roomId,
+        type: "POST",
+        dataType: "json",
+        success: function (response) {
+            console.log("방 입장 성공:", response);
+            currentRoomId = roomId;
+            connect();
+        },
+        error: function (xhr, status, error) {
+            console.error("방 입장 실패. Status: " + status);
+        }
+    });
+}
+
+// 내 채팅방 찾기
+function getMyRoomList() {
+    $.ajax({
+        url: "/api/chat-rooms/my-rooms",
+        type: "GET",
+        dataType: "json",
+        success: function (rooms) {
+            let roomListUl = $("#my-rooms-list");
             roomListUl.empty();
             rooms.forEach(function (room) {
                 let li = $("<li></li>");
@@ -177,5 +227,15 @@ $(function () {
         createRoom();
     })
 
-    getRoomList();
+    $("#my-rooms-btn").click(function () {
+        $("#my-rooms-list").show();
+        $("#find-rooms-list").hide();
+        getMyRoomList();
+    });
+
+    $("#find-rooms-btn").click(function () {
+        $("#my-rooms-list").hide();
+        $("#find-rooms-list").show();
+        getRoomList();
+    });
 });

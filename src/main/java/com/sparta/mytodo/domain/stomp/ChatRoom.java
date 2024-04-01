@@ -39,6 +39,9 @@ public class ChatRoom extends Timestamped {
     @Column(nullable = false)
     private String coverImage;
 
+    @Column
+    private String chatRoomTag;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User user;

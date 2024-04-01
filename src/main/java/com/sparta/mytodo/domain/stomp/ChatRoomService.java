@@ -12,18 +12,28 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final MemberRepository memberRepository;
 
-    public List<GetChatRoomResponse> getChatRooms() {
-        return chatRoomRepository.findAll().stream()
+    public List<GetChatRoomResponse> getChatRooms(User user) {
+        return chatRoomRepository.findAllByNotInMember(user.getUserId()).stream()
             .map(chatRoom -> new GetChatRoomResponse(chatRoom.getUser().getUserName(), chatRoom))
             .toList();
     }
 
     public GetChatRoomResponse createChatRoom(CreateChatRoomRequest request, User user) {
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+
+        for (i = 0; i < request.getChatRoomTags().size() - 1; i++) {
+            sb.append(request.getChatRoomTags().get(i)).append(",");
+        }
+
+        sb.append(request.getChatRoomTags().get(i));
+
         ChatRoom chatRoom = chatRoomRepository.save(
             ChatRoom.builder()
                 .chatRoomName(request.getChatRoomName())
                 .description(request.getDescription())
                 .coverImage(request.getCoverImage())
+                .chatRoomTag(sb.toString())
                 .user(user)
                 .build()
         );
@@ -43,6 +53,18 @@ public class ChatRoomService {
 
     public List<GetChatRoomResponse> getMyChatRooms(User user) {
         return chatRoomRepository.findAllByMember(user.getUserId()).stream()
+            .map(chatRoom -> new GetChatRoomResponse(chatRoom.getUser().getUserName(), chatRoom))
+            .toList();
+    }
+
+    public List<GetChatRoomResponse> searchChatRoomsByKeyword(String keyword) {
+        return chatRoomRepository.findAllByKeyword(keyword).stream()
+            .map(chatRoom -> new GetChatRoomResponse(chatRoom.getUser().getUserName(), chatRoom))
+            .toList();
+    }
+
+    public List<GetChatRoomResponse> searchChatRoomsByTag(String tag) {
+        return chatRoomRepository.findAllByTag(tag).stream()
             .map(chatRoom -> new GetChatRoomResponse(chatRoom.getUser().getUserName(), chatRoom))
             .toList();
     }
