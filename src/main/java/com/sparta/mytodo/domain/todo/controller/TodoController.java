@@ -45,7 +45,6 @@ public class TodoController {
 
         return ResponseEntity.ok().body(
             ResponseDto.<TodoResponseDto>builder()
-                .httpCode(200)
                 .data(responseDto).build()
         );
     }
@@ -57,7 +56,6 @@ public class TodoController {
 
         return ResponseEntity.ok().body(
             ResponseDto.<List<TodoResponseDto>>builder()
-                .httpCode(200)
                 .data(responseDtoList).build()
         );
     }
@@ -75,7 +73,6 @@ public class TodoController {
 
         return ResponseEntity.ok().body(
             ResponseDto.<Page<TodoResponseDto>>builder()
-                .httpCode(200)
                 .data(responseDtoPage).build()
         );
     }
@@ -95,7 +92,6 @@ public class TodoController {
 
         return ResponseEntity.ok().body(
             ResponseDto.<Page<TodoResponseDto>>builder()
-                .httpCode(200)
                 .data(responseDtoList).build()
         );
     }
@@ -114,7 +110,6 @@ public class TodoController {
 
         return ResponseEntity.ok().body(
             ResponseDto.<TodoResponseDto>builder()
-                .httpCode(200)
                 .data(responseDto).build()
         );
     }
@@ -129,9 +124,7 @@ public class TodoController {
             userDetails.getUser());
 
         return ResponseEntity.ok().body(
-            ResponseDto.<TodoResponseDto>builder()
-                .httpCode(200)
-                .data(responseDto).build()
+            ResponseDto.ofData(responseDto)
         );
     }
 }

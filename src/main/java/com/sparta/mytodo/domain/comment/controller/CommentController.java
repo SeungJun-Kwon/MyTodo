@@ -41,7 +41,6 @@ public class CommentController {
 
         return ResponseEntity.ok().body(
             ResponseDto.<CommentResponseDto>builder()
-                .httpCode(200)
                 .data(responseDto).build()
         );
     }
@@ -60,7 +59,6 @@ public class CommentController {
 
         return ResponseEntity.ok().body(
             ResponseDto.<CommentResponseDto>builder()
-                .httpCode(200)
                 .data(responseDto).build()
         );
     }
@@ -73,7 +71,6 @@ public class CommentController {
 
         return ResponseEntity.ok().body(
             ResponseDto.<Long>builder()
-                .httpCode(200)
                 .data(deleteId).build()
         );
     }

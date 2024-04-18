@@ -2,6 +2,51 @@ let currentRoomId = 0;
 let messageList;
 let messageInput;
 
+// SSE 이벤트 구독
+const eventSource = new EventSource(
+    `http://localhost:8080/api/chat-rooms/sse?userId=` + localStorage.getItem('userId')
+);
+
+// 채팅방 수정 이벤트
+eventSource.addEventListener('modifyChatRoom', event => {
+    let data = JSON.parse(event.data);
+
+    // 현재 조회 중인 채팅방 목록에서 일치하는 요소 찾기
+    let roomListUl = $("#my-rooms-list, #find-rooms-list");
+    roomListUl.find("li").each(function () {
+        let chatRoomId = $(this).data('chat-room-id');
+        if (chatRoomId === data.chatRoomId) {
+            // 채팅방 정보 업데이트
+            let roomInfo = $(this).find("div");
+            roomInfo.html(`
+                방 번호: ${data.chatRoomId}<br>
+                방 이름: ${data.chatRoomName}<br>
+                방장: ${data.userName}<br>
+                설명: ${data.description}
+            `);
+
+            return false;
+        }
+    });
+});
+
+// 채팅방 삭제 이벤트
+eventSource.addEventListener('deleteChatRoom', event => {
+    let chatRoomId = event.data;
+
+    // 현재 조회 중인 채팅방 목록에서 일치하는 요소 찾기
+    let roomListUl = $("#my-rooms-list, #find-rooms-list");
+    roomListUl.find("li").each(function () {
+        let id = $(this).data('chat-room-id');
+        if (id === chatRoomId) {
+            // 일치하는 <li> 요소 제거
+            $(this).remove();
+            $(this).attr('id', chatRoomId);
+            return false;
+        }
+    });
+});
+
 // STOMP 클라이언트 초기화
 const stompClient = new StompJs.Client({
     brokerURL: 'ws://localhost:8080/gs-guide-websocket' // 엔드포인트
@@ -66,11 +111,10 @@ function onMessageReceived(payload) {
 
 // 연결에 따른 UI 설정
 function setConnected(connected) {
-    if(connected) {
+    if (connected) {
         $("#room-list").hide();
         $("#chat-area").show();
-    }
-    else if(!connected) {
+    } else if (!connected) {
         $("#room-list").show();
         $("#chat-area").hide();
     }
@@ -111,7 +155,7 @@ function getRoomList() {
             let roomListUl = $("#find-rooms-list");
             roomListUl.empty();
             rooms.forEach(function (room) {
-                let li = $("<li></li>");
+                let li = $("<li></li>").data("chat-room-id", room.chatRoomId);
                 let roomInfo = $("<div></div>").html(`
                     방 번호: ${room.chatRoomId}<br>
                     방 이름: ${room.chatRoomName}<br>
@@ -161,7 +205,7 @@ function getMyRoomList() {
             let roomListUl = $("#my-rooms-list");
             roomListUl.empty();
             rooms.forEach(function (room) {
-                let li = $("<li></li>");
+                let li = $("<li></li>").data("chat-room-id", room.chatRoomId);
                 let roomInfo = $("<div></div>").html(`
                     방 번호: ${room.chatRoomId}<br>
                     방 이름: ${room.chatRoomName}<br>
@@ -198,7 +242,8 @@ function createRoom() {
         data: JSON.stringify({
             chatRoomName: roomName,
             description: roomDesc,
-            coverImage: ""
+            coverImage: "",
+            chatRoomTags: []
         }),
         success: function (createdRoom) {
             $("#new-room-name").val("");
@@ -230,7 +275,6 @@ $(function () {
     $("#my-rooms-btn").click(function () {
         $("#my-rooms-list").show();
         $("#find-rooms-list").hide();
-        getMyRoomList();
     });
 
     $("#find-rooms-btn").click(function () {
@@ -238,4 +282,6 @@ $(function () {
         $("#find-rooms-list").show();
         getRoomList();
     });
+
+    getMyRoomList();
 });

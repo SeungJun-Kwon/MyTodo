@@ -60,7 +60,7 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> getCommentByTodoId(Long todoId) {
+    public List<CommentResponseDto> getCommentsByTodoId(Long todoId) {
         return commentRepository.findAllByTodoId(todoId).stream().map(CommentResponseDto::new)
             .toList();
     }

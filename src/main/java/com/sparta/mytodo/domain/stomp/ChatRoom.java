@@ -45,4 +45,13 @@ public class ChatRoom extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User user;
+
+    public ChatRoom update(ModifyChatRoomRequest request, String tags) {
+        this.chatRoomName = request.getChatRoomName();
+        this.description = request.getDescription();
+        this.coverImage = request.getCoverImage();
+        this.chatRoomTag = tags;
+
+        return this;
+    }
 }

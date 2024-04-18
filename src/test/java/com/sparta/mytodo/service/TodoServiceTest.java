@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 
+import com.sparta.mytodo.domain.comment.service.CommentService;
 import com.sparta.mytodo.domain.todo.dto.TodoRequestDto;
 import com.sparta.mytodo.domain.todo.dto.TodoResponseDto;
 import com.sparta.mytodo.domain.todo.entity.Todo;
@@ -32,12 +33,14 @@ class TodoServiceTest {
 
     @Mock
     TodoRepository todoRepository;
+    @Mock
+    CommentService commentService;
 
     TodoService todoService;
 
     @BeforeEach
     void setUp() {
-        todoService = new TodoService(todoRepository);
+        todoService = new TodoService(todoRepository, commentService);
     }
 
     @Test

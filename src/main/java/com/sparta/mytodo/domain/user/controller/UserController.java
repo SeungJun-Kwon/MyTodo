@@ -34,7 +34,6 @@ public class UserController {
         UserResponseDto dto = userServiceImpl.signup(signUpRequestDto);
 
         return ResponseEntity.ok(ResponseDto.builder()
-            .httpCode(HttpStatus.OK.value())
             .data(dto)
             .build());
     }

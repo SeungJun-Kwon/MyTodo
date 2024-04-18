@@ -1,14 +1,19 @@
 package com.sparta.mytodo.repository;
 
+import static com.sparta.mytodo.domain.comment.entity.QComment.*;
+import static com.sparta.mytodo.domain.user.entity.QUser.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.mytodo.domain.comment.dto.CommentRequestDto;
 import com.sparta.mytodo.domain.comment.entity.Comment;
+import com.sparta.mytodo.domain.comment.entity.QComment;
 import com.sparta.mytodo.domain.comment.repository.CommentRepository;
 import com.sparta.mytodo.domain.todo.entity.Todo;
 import com.sparta.mytodo.domain.todo.repository.TodoRepository;
+import com.sparta.mytodo.domain.user.entity.QUser;
 import com.sparta.mytodo.domain.user.entity.User;
 import com.sparta.mytodo.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityListeners;
@@ -26,6 +31,8 @@ class CommentRepositoryTest extends RepositoryTest {
     UserRepository userRepository;
     @Autowired
     TodoRepository todoRepository;
+    @Autowired
+    JPAQueryFactory jpaQueryFactory;
 
     @Test
     @DisplayName("Comment 생성")
@@ -72,5 +79,16 @@ class CommentRepositoryTest extends RepositoryTest {
         comment = commentRepository.findById(comment.getCommentId()).orElse(null);
 
         assertNull(comment);
+    }
+
+    @Test
+    void getCommentsJoinUser() {
+        long startTime = System.currentTimeMillis();
+        jpaQueryFactory.select(comment.content, user.userName, comment.createdAt).from(comment)
+            .join(user).on(comment.user.userId.eq(user.userId)).fetch();
+        long endTime = System.currentTimeMillis();
+        long time = endTime - startTime;
+
+        System.out.println(time);
     }
 }

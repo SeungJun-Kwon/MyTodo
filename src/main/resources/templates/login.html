@@ -15,6 +15,7 @@
         $(document).ready(function () {
             // 토큰 삭제
             Cookies.remove('Authorization', {path: '/'});
+            localStorage.clear();
         });
 
         const href = location.href;
@@ -44,6 +45,10 @@
                 $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
                     jqXHR.setRequestHeader('Authorization', token);
                 });
+
+                localStorage.setItem('userId', res.userId);
+                localStorage.setItem('email', res.email);
+                localStorage.setItem('userName', res.userName);
 
                 // 로그인 성공 시 Todo 페이지로 이동
                 window.location.href = host;
