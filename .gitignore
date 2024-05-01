@@ -39,3 +39,9 @@ out/
 
 ### SSH Key ###
 *.pem
+
+### properties ###
+*.properties
+
+### env ###
+.env
