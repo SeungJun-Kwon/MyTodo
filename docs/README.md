@@ -1,8 +1,6 @@
 # MyTodo
 스파르타 코딩클럽 Spring 숙련주차 개인 과제
 
-**링크 : <a href="http://13.124.62.104:8080/" target="_blank">MyTodo</a>**
-
 ---
 
 ## Todo 기능 설계
